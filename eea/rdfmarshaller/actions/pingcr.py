@@ -1,33 +1,35 @@
 """ RDF Marshaller ping action
 """
 import logging
-from eventlet.green import urllib2
 import urllib
-import lxml.etree
-from App.config import getConfiguration
 from zope import schema
-from zope.component import adapts, getUtility, ComponentLookupError
-from zope.formlib import form
+
+import lxml.etree
 from zope.interface import implements, Interface
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+
+from App.config import getConfiguration
 from OFS.SimpleItem import SimpleItem
-from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-from plone.app.async.interfaces import IAsyncService
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+from eventlet.green import urllib2
+from plone.app.async.interfaces import IAsyncService
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
+from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
+from zope.component import adapts, getUtility, ComponentLookupError
+from zope.formlib import form
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 
-hasLinguaPloneInstalled = True
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
+    hasLinguaPloneInstalled = True
 except ImportError:
     hasLinguaPloneInstalled = False
 
-hasVersionsInstalled = True
 try:
     from eea.versions.interfaces import IGetVersions, IVersionEnhanced
+    hasVersionsInstalled = True
 except ImportError:
     hasVersionsInstalled = False
 

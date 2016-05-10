@@ -1,5 +1,11 @@
 """ Archetypes
 """
+import sys
+
+import rdflib
+from zope.interface import implements, Interface
+
+import surf
 from OFS.interfaces import IFolder
 from Products.Archetypes.interfaces import IBaseObject
 from Products.Archetypes.interfaces import IField
@@ -16,13 +22,9 @@ from eea.rdfmarshaller.config import DEBUG
 from eea.rdfmarshaller.interfaces import ISurfSession, IObject2Surf
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from zope.component import adapts
-from zope.component import queryMultiAdapter
 from zope.component import getMultiAdapter
 from zope.component import queryAdapter
-from zope.interface import implements, Interface
-import rdflib
-import surf
-import sys
+from zope.component import queryMultiAdapter
 
 
 class Archetype2Surf(GenericObject2Surf):

@@ -3,6 +3,8 @@ Changelog
 
 8.1.dev0 - (unreleased)
 -----------------------
+* Bug fix: Fix pylint warnings
+  [ichim-david refs #71940]
 
 8.0 - (2016-02-15)
 ------------------

@@ -1,5 +1,12 @@
 """ Archetypes fields
 """
+import sys
+
+import rdflib
+import re
+from zope.interface import implements, Interface
+
+import surf
 from DateTime.DateTime import DateTime
 from Products.Archetypes.interfaces import IField, IFileField
 from Products.CMFPlone import log
@@ -9,12 +16,7 @@ from eea.rdfmarshaller.archetypes.interfaces import IReferenceField
 from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from zope.component import adapts
-from zope.interface import implements, Interface
-import rdflib
-import sys
-import re
 
-import surf
 
 #import logging
 #logging.basicConfig(level=logging.CRITICAL)

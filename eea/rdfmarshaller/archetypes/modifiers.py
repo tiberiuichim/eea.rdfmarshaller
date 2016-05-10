@@ -1,14 +1,16 @@
 """ Archetypes modifiers
 """
 from Acquisition import aq_inner
+
+import rdflib
+import re
+from zope.interface import implements, providedBy
+
 from Products.Archetypes.interfaces import IBaseContent
 from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFCore.utils import getToolByName
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from zope.component import adapts
-from zope.interface import implements, providedBy
-import rdflib
-import re
 
 ILLEGAL_XML_CHARS_PATTERN = re.compile(
     u'[\x00-\x08\x0b\x0c\x0e-\x1F\uD800-\uDFFF\uFFFE\uFFFF]'
