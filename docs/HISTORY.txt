@@ -1,6 +1,9 @@
 Changelog
 =========
 
+8.2.dev0 - (unreleased)
+-----------------------
+
 8.1 - (2016-05-16)
 ------------------
 * Bug fix: Fix pylint warnings
