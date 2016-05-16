@@ -5,6 +5,8 @@ Changelog
 -----------------------
 * Bug fix: Fix pylint warnings
   [ichim-david refs #71940]
+* Bug fix: Fixed condition for ping_cr with create=true
+  [szabozo0 refs #72273]
 
 8.0 - (2016-02-15)
 ------------------

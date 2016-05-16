@@ -269,7 +269,7 @@ def ping_CRSDS(context, options):
                         options['service_to_ping'],
                         options['obj_url'])
             if (not options['create']) and \
-                message == 'URL not in catalogue of sources, no action taken.':
+               'URL not in catalogue of sources' in message:
                 logger.info("Retry ping with create=true")
                 options['create'] = True
                 continue
