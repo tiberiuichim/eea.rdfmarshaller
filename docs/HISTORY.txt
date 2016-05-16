@@ -1,8 +1,8 @@
 Changelog
 =========
 
-8.1.dev0 - (unreleased)
------------------------
+8.1 - (2016-05-16)
+------------------
 * Bug fix: Fix pylint warnings
   [ichim-david refs #71940]
 * Bug fix: Fixed condition for ping_cr with create=true
