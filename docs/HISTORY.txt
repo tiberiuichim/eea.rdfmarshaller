@@ -3,6 +3,8 @@ Changelog
 
 8.2.dev0 - (unreleased)
 -----------------------
+* Feature: registered schema.org namespace
+  [alecghica refs #72025]
 
 8.1 - (2016-05-16)
 ------------------
@@ -18,12 +20,12 @@ Changelog
 ------------------
 * Change: Removed CSRF security quickfix for tests
   [szabozo0 refs #30858]
-* Bugfix: check if relation is not None before ping action
+* Bug fix: check if relation is not None before ping action
   [chiridra refs #30387]
 
 7.8 - (2015-10-05)
 ------------------
-* Bugfix: set socket timeout to prevent hanging out connection on urlopen calls with eventlet
+* Bug fix: set socket timeout to prevent hanging out connection on urlopen calls with eventlet
   [lucas refs #29063]
 * Change: Improved relatedItems rdf export using dublincore
   [chiridra refs #28697]

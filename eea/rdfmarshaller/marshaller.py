@@ -21,6 +21,7 @@ logging.basicConfig(level=logging.CRITICAL)
 
 surf.ns.register(EEA="http://www.eea.europa.eu/ontologies.rdf#")
 surf.ns.register(DCAT="http://www.w3.org/ns/dcat#")
+surf.ns.register(SCHEMA="http://schema.org/")
 
 
 class RDFMarshaller(Marshaller):
@@ -63,6 +64,9 @@ class RDFMarshaller(Marshaller):
                                  override=True)
         store.reader.graph.bind('dcat',
                                 surf.ns.DCAT,
+                                override=True)
+        store.reader.graph.bind('schema',
+                                surf.ns.SCHEMA,
                                 override=True)
 
         self._store = store
