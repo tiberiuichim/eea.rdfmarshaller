@@ -1,8 +1,8 @@
 Changelog
 =========
 
-8.2.dev0 - (unreleased)
------------------------
+8.2 - (2016-05-27)
+------------------
 * Feature: registered schema.org namespace
   [alecghica refs #72025]
 
