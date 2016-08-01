@@ -116,8 +116,10 @@ The hasPart modifier
 A folder uses dcterms:hasPart to tell which content it has.
 
   >>> folder = self.portal[self.portal.invokeFactory('Folder', id='myfolder')]
-  >>> news = folder[folder.invokeFactory('News Item', id='news1')]
+  >>> news1 = folder[folder.invokeFactory('News Item', id='news1')]
+  >>> folder.portal_workflow.doActionFor(news1, 'publish') 
   >>> news2 = folder[folder.invokeFactory('News Item', id='news2')]
+  >>> folder.portal_workflow.doActionFor(news2, 'publish') 
   >>> content_type, length, data = marshaller.marshall(folder)
   >>> store.load_triples(source=StringIO(data))
   True

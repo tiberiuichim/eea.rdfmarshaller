@@ -3,6 +3,8 @@ Changelog
 
 8.4.dev0 - (unreleased)
 -----------------------
+* Bug fix: fixed/updated tests
+  [ghicaale refs #74285]
 
 8.3 - (2016-07-28)
 ------------------
