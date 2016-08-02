@@ -178,8 +178,13 @@ class ATFolderish2Surf(Archetype2Surf):
             resource.dcterms_hasPart = []
 
             catalog = getToolByName(self.context, 'portal_catalog')
-            contentFilter = {'path': {'query': '/'.join(self.context.getPhysicalPath()), 'depth': 1}}
-            objs = [b.getObject() for b in catalog(contentFilter, review_state='published', show_all=1, show_inactive=1)]
+            contentFilter = {'path': 
+                {'query': '/'.join(self.context.getPhysicalPath()),
+                 'depth': 1}}
+            objs = [b.getObject() for b in catalog(contentFilter,
+                                                   review_state='published',
+                                                   show_all=1,
+                                                   show_inactive=1)]
 
             for obj in objs:
                 resource.dcterms_hasPart.append(rdflib.URIRef(
