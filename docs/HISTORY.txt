@@ -1,6 +1,9 @@
 Changelog
 =========
 
+8.6.dev0 - (unreleased)
+-----------------------
+
 8.5 - (2016-10-10)
 ------------------
 * Bug fix: fixed "Can't pickle <class 'urllib2.URLError'>" error from ping CR
