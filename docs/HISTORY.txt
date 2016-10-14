@@ -3,6 +3,8 @@ Changelog
 
 8.6.dev0 - (unreleased)
 -----------------------
+* Bug fix: fixed non ascii characters for rdf export
+  [szabozo0 refs #77766]
 
 8.5 - (2016-10-10)
 ------------------
