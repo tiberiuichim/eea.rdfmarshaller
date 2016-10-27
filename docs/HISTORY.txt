@@ -3,6 +3,8 @@ Changelog
 
 8.7.dev0 - (unreleased)
 -----------------------
+* Bug fix: fixed error handling
+  [ghicaale refs #75566]
 
 8.6 - (2016-10-14)
 ------------------

@@ -282,6 +282,6 @@ def ping_CRSDS(context, options):
             logger.info("Pinging %s for object %s failed with message: %s",
                     options['service_to_ping'],
                     options['obj_url'],
-                    err.msg)
+                    err.reason)
 
         break
