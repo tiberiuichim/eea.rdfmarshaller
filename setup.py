@@ -10,7 +10,7 @@ version = open(os.path.join(*path)).read().strip()
 setup(name=name,
       version=version,
       description="RDF marshaller for Plone",
-      long_description=open("README.txt").read() + "\n" +
+      long_description=open("README.rst").read() + "\n" +
                        open(os.path.join("docs", "HISTORY.txt")).read(),
       classifiers=[
         "Framework :: Plone",
