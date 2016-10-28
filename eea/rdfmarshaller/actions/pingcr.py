@@ -278,5 +278,10 @@ def ping_CRSDS(context, options):
                     options['service_to_ping'],
                     options['obj_url'],
                     err.msg)
+        except urllib2.URLError, err:
+            logger.info("Pinging %s for object %s failed with message: %s",
+                    options['service_to_ping'],
+                    options['obj_url'],
+                    err.reason)
 
         break

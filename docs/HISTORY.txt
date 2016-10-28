@@ -1,8 +1,20 @@
 Changelog
 =========
 
-8.5.dev0 - (unreleased)
+8.7.dev0 - (unreleased)
 -----------------------
+* Bug fix: fixed error handling
+  [ghicaale refs #75566]
+
+8.6 - (2016-10-14)
+------------------
+* Bug fix: fixed non ascii characters for rdf export
+  [szabozo0 refs #77766]
+
+8.5 - (2016-10-10)
+------------------
+* Bug fix: fixed "Can't pickle <class 'urllib2.URLError'>" error from ping CR
+  [ghicaale refs #75566]
 
 8.4 - (2016-08-03)
 ------------------
