@@ -16,7 +16,8 @@ class RDFExport(object):
         _content_type, _length, data = marshaller.marshall(self.context,
                                                            endLevel=endLevel)
         #fix for #77766; fix non ascii characters for rdf export
-        sanitized_data = etree.tostring(etree.fromstring(data), pretty_print=True)
+        sanitized_data = etree.tostring(etree.fromstring(data),
+                                        pretty_print=True)
         #end of fix
         self.request.response.setHeader('Content-Type',
                                         'application/rdf+xml; charset=utf-8')
