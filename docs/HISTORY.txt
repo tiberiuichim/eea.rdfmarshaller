@@ -3,6 +3,8 @@ Changelog
 
 8.8.dev0 - (unreleased)
 -----------------------
+* Change: remove private unicode range characters from rdf output
+  [ichim-david refs #77804]
 
 8.7 - (2016-10-31)
 ------------------
