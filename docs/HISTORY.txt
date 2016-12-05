@@ -1,6 +1,9 @@
 Changelog
 =========
 
+8.9.dev0 - (unreleased)
+-----------------------
+
 8.8 - (2016-12-05)
 ------------------
 * Change: remove private unicode range characters from rdf output
