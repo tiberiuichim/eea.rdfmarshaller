@@ -27,12 +27,8 @@ class RDFExport(object):
             unicode_data = data.decode(encoding="utf-8", errors="ignore")
         without_private_chars = [i for i in unicode_data if not is_pua(i)]
         without_private_chars = "".join(without_private_chars)
-        without_private_chars = without_private_chars.encode('utf-8')
-        #fix for #77766; fix non ascii characters for rdf export
-        sanitized_data = etree.tostring(etree.fromstring(without_private_chars),
-                                        pretty_print=True)
+        sanitized_data = without_private_chars.encode('utf-8')
 
-        #end of fix
         self.request.response.setHeader('Content-Type',
                                         'application/rdf+xml; charset=utf-8')
         return sanitized_data
