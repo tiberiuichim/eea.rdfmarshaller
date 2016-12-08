@@ -1,5 +1,4 @@
 """ Export module """
-from lxml import etree
 from Products.Marshall.registry import getComponent
 import unicodedata
 
