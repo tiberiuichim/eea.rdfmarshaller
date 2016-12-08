@@ -7,6 +7,7 @@
   <include package=".browser" />
   <include package=".upgrades" />
   <include package=".archetypes" />
+  <include package=".dexterity" />
   <include package=".actions" />
 
   <class class="surf.Session">

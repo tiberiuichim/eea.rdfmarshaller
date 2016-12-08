@@ -3,6 +3,13 @@
            xmlns:browser="http://namespaces.zope.org/browser">
 
   <browser:page
+    for="plone.dexterity.interfaces.IDexterityContainer"
+    name="rdf"
+    class=".export.RDFExport"
+    permission="zope2.View"
+    />
+
+  <browser:page
     for="Products.Archetypes.interfaces.IBaseObject"
     name="rdf"
     class=".export.RDFExport"

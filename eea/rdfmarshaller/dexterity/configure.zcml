@@ -1,0 +1,12 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+    <adapter factory=".Dexterity2Surf"
+        provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
+
+    <adapter factory=".Dexterity2Surf"
+        for="plone.dexterity.interfaces.IDexterityContainer eea.rdfmarshaller.interfaces.ISurfSession"
+        provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
+
+</configure>
