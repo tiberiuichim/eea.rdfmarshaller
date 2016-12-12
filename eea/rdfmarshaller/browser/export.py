@@ -1,5 +1,6 @@
 """ Export module """
 from Products.Marshall.registry import getComponent
+from lxml import etree
 
 
 class RDFExport(object):
