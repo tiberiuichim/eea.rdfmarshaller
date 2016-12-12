@@ -17,8 +17,9 @@ class RDFExport(object):
                                                            endLevel=endLevel)
         sanitized_data = data.decode(encoding="ascii", errors="ignore")
         utf8_parser = etree.XMLParser(encoding='utf-8')
-        sanitized_data = etree.tostring(etree.fromstring(sanitized_data.encode('utf-8'), parser=utf8_parser),
-                                        pretty_print=True)
+        sanitized_data = etree.tostring(etree.fromstring(
+            sanitized_data.encode('utf-8'), parser=utf8_parser),
+            pretty_print=True)
 
         self.request.response.setHeader('Content-Type',
                                         'application/rdf+xml; charset=utf-8')
