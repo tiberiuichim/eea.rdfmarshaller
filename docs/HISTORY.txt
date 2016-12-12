@@ -3,6 +3,8 @@ Changelog
 
 8.9.dev0 - (unreleased)
 -----------------------
+* Change: rdf export now ignores non ascii characters
+  [ichim-david refs #77804]
 
 8.8 - (2016-12-05)
 ------------------

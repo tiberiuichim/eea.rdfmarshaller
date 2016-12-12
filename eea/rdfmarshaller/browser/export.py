@@ -1,12 +1,5 @@
 """ Export module """
 from Products.Marshall.registry import getComponent
-import unicodedata
-
-
-def is_pua(c):
-    """ check if character is part of private unicode characters
-    """
-    return unicodedata.category(c) == 'Co'
 
 
 class RDFExport(object):
@@ -21,12 +14,10 @@ class RDFExport(object):
         endLevel = int(self.request.get('endLevel', 1))
         _content_type, _length, data = marshaller.marshall(self.context,
                                                            endLevel=endLevel)
-        unicode_data = data
-        if isinstance(data, str):
-            unicode_data = data.decode(encoding="utf-8", errors="ignore")
-        without_private_chars = [i for i in unicode_data if not is_pua(i)]
-        without_private_chars = "".join(without_private_chars)
-        sanitized_data = without_private_chars.encode('utf-8')
+        sanitized_data = data.decode(encoding="ascii", errors="ignore")
+        utf8_parser = etree.XMLParser(encoding='utf-8')
+        sanitized_data = etree.tostring(etree.fromstring(sanitized_data.encode('utf-8'), parser=utf8_parser),
+                                        pretty_print=True)
 
         self.request.response.setHeader('Content-Type',
                                         'application/rdf+xml; charset=utf-8')
