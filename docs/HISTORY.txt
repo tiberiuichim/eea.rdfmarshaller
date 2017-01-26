@@ -3,6 +3,8 @@ Changelog
 
 9.0.dev0 - (unreleased)
 -----------------------
+* Bug fix: ignore invalid xml given to the lxml parser
+  [ichim-david refs #80209]
 
 8.9 - (2016-12-19)
 ------------------

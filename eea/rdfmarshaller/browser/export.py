@@ -16,7 +16,7 @@ class RDFExport(object):
         _content_type, _length, data = marshaller.marshall(self.context,
                                                            endLevel=endLevel)
         sanitized_data = data.decode(encoding="ascii", errors="ignore")
-        utf8_parser = etree.XMLParser(encoding='utf-8')
+        utf8_parser = etree.XMLParser(encoding='utf-8', recover=True)
         sanitized_data = etree.tostring(etree.fromstring(
             sanitized_data.encode('utf-8'), parser=utf8_parser),
             pretty_print=True)
