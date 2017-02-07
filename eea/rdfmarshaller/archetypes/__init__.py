@@ -271,6 +271,7 @@ class FTI2Surf(GenericObject2Surf):
     def modify_resource(self, resource, *args, **kwds):
         """ Schema to Surf """
 
+        import pdb; pdb.set_trace()
         context = self.context
         session = self.session
 

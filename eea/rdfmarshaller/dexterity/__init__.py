@@ -4,16 +4,15 @@
 # from Products.CMFPlone.utils import _createObjectByType
 # from eea.rdfmarshaller.archetypes.interfaces import IATVocabularyTerm
 # from eea.rdfmarshaller.archetypes.interfaces import IArchetype2Surf
-# from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
 # from eea.rdfmarshaller.interfaces import IObject2Surf
 # from zope.component import adapts
 # from zope.interface import implements   # , Interface
 # import rdflib
 # import surf
 
-import surf
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
+from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
@@ -21,6 +20,7 @@ from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.behavior.interfaces import IBehavior
 from plone.dexterity.interfaces import IDexterityContent
+from plone.dexterity.interfaces import IDexterityFTI
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from zope.component import adapts
 from zope.component import getMultiAdapter
@@ -28,6 +28,7 @@ from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.schema import getFieldsInOrder
+import surf
 import sys
 
 
@@ -207,4 +208,65 @@ class Dexterity2Surf(GenericObject2Surf):
                     ),
                     severity=log.logging.WARN
                 )
+        return resource
+
+
+class DexterityFTI2Surf(GenericObject2Surf):
+    """ IObject2Surf implemention for TypeInformations,
+
+    The type informations are persistent objects found in the portal_types """
+
+    adapts(IDexterityFTI, ISurfSession)
+
+    _namespace = surf.ns.RDFS
+    _prefix = 'rdfs'
+
+    # fields not to export, i.e Dublin Core
+    blacklist_map = ['constrainTypesMode',
+                     'locallyAllowedTypes',
+                     'immediatelyAddableTypes',
+                     'language',
+                     'creation_date',
+                     'modification_date',
+                     'creators',
+                     'subject',
+                     'effectiveDate',
+                     'expirationDate',
+                     'contributors',
+                     'allowDiscussion',
+                     'rights',
+                     'nextPreviousEnabled',
+                     'excludeFromNav',
+                     'creator'
+                     ]
+
+    def modify_resource(self, resource, *args, **kwds):
+        """ Schema to Surf """
+
+        context = self.context
+        session = self.session
+
+        setattr(resource, 'rdfs_label', (context.Title(), u'en'))
+        setattr(resource, 'rdfs_comment', (context.Description(), u'en'))
+        setattr(resource, 'rdf_id', self.rdfId)
+        resource.update()
+
+        # the following hack creates a new instance of a content to
+        # allow extracting the full schema, with extended fields
+        # Is this the only way to do this?
+        # Another way would be to do a catalog search for a portal_type,
+        # grab the first object from there and use that as context
+
+        for fieldName, field in get_ordered_fields(context):
+
+            if fieldName in self.blacklist_map:
+                continue
+
+            field2surf = queryMultiAdapter(
+                (field, context, session), interface=IFieldDefinition2Surf)
+            if field2surf is None:
+                # TODO: log a warning
+                continue
+            field2surf.write()
+
         return resource
