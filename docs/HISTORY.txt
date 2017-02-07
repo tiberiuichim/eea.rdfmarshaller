@@ -1,8 +1,18 @@
 Changelog
 =========
 
-8.9.dev0 - (unreleased)
+9.1.dev0 - (unreleased)
 -----------------------
+
+9.0 - (2017-01-30)
+------------------
+* Bug fix: ignore invalid xml given to the lxml parser
+  [ichim-david refs #80209]
+
+8.9 - (2016-12-19)
+------------------
+* Change: rdf export now ignores non ascii characters
+  [ichim-david refs #77804]
 
 8.8 - (2016-12-05)
 ------------------
