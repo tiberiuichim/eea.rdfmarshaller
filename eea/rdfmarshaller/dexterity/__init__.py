@@ -177,6 +177,7 @@ class Dexterity2Surf(GenericObject2Surf):
                         (self.context.absolute_url(), fieldName,
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
+                continue
 
             valueAdapter = queryAdapter(value, interface=IValue2Surf)
             if valueAdapter:
@@ -184,17 +185,16 @@ class Dexterity2Surf(GenericObject2Surf):
             if not value or value == "None":
                 continue
 
-            prefix = fieldAdapter.prefix or self.prefix
+            prefix = (fieldAdapter.prefix or self.prefix).replace('.', '')
+            print prefix
 
-            if fieldAdapter.name:
-                fieldName = fieldAdapter.name
-            elif fieldName in self.field_map:
+            fieldName = fieldAdapter.name
+            if fieldName in self.field_map:
                 fieldName = self.field_map.get(fieldName)
             elif fieldName in self.dc_map:
                 fieldName = self.dc_map.get(fieldName)
                 prefix = 'dcterms'
 
-            prefix = prefix.replace('.', '')
             try:
                 setattr(resource, '%s_%s' % (prefix, fieldName), value)
             except Exception:
