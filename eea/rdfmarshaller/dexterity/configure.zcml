@@ -9,4 +9,10 @@
         for="plone.dexterity.interfaces.IDexterityContainer eea.rdfmarshaller.interfaces.ISurfSession"
         provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
 
+    <subscriber factory=".modifiers.WorkflowStateModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <adapter factory=".fields.DXField2Surf" />
+    <adapter factory=".fields.RichValue2Surf" />
+
 </configure>

@@ -1,4 +1,5 @@
 """ Export module """
+
 from Products.Marshall.registry import getComponent
 from lxml import etree
 
@@ -24,6 +25,7 @@ class RDFExport(object):
         self.request.response.setHeader('Content-Type',
                                         'application/rdf+xml; charset=utf-8')
         return sanitized_data
+
 
 class RDFSExport(object):
     """ RDF Surf export """

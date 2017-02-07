@@ -1,24 +1,128 @@
 """ rdfmarshaller adapters for dexterity content
 """
 
+# from Products.CMFPlone.utils import _createObjectByType
+# from eea.rdfmarshaller.archetypes.interfaces import IATVocabularyTerm
+# from eea.rdfmarshaller.archetypes.interfaces import IArchetype2Surf
+# from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
+# from eea.rdfmarshaller.interfaces import IObject2Surf
+# from zope.component import adapts
+# from zope.interface import implements   # , Interface
+# import rdflib
+# import surf
+
+import surf
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
+from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
+from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
+from plone.autoform.interfaces import IFormFieldProvider
+from plone.behavior.interfaces import IBehavior
 from plone.dexterity.interfaces import IDexterityContent
+from plone.supermodel.interfaces import FIELDSETS_KEY
 from zope.component import adapts
-import rdflib
+from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.component import queryAdapter
+from zope.component import queryMultiAdapter
+from zope.schema import getFieldsInOrder
 import sys
+
+
+def non_fieldset_fields(schema):
+    fieldset_fields = []
+    fieldsets = schema.queryTaggedValue(FIELDSETS_KEY, [])
+
+    for fieldset in fieldsets:
+        fieldset_fields.extend(fieldset.fields)
+
+    fields = [info[0] for info in getFieldsInOrder(schema)]
+    return [f for f in fields if f not in fieldset_fields]
+
+
+def get_ordered_fields(fti):
+    # this code is much complicated because we have to get sure
+    # we get the fields in the order of the fieldsets
+    # the order of the fields in the fieldsets can differ
+    # of the getFieldsInOrder(schema) order...
+    # that's because fields from different schemas
+    # can take place in the same fieldset
+    schema = fti.lookupSchema()
+    fieldset_fields = {}
+    ordered_fieldsets = ['default']
+    for fieldset in schema.queryTaggedValue(FIELDSETS_KEY, []):
+        ordered_fieldsets.append(fieldset.__name__)
+        fieldset_fields[fieldset.__name__] = fieldset.fields
+
+    if fieldset_fields.get('default', []):
+        fieldset_fields['default'] += non_fieldset_fields(schema)
+    else:
+        fieldset_fields['default'] = non_fieldset_fields(schema)
+
+    # Get the behavior fields
+    fields = getFieldsInOrder(schema)
+    for behavior_id in fti.behaviors:
+        schema = getUtility(IBehavior, behavior_id).interface
+        if not IFormFieldProvider.providedBy(schema):
+            continue
+
+        fields.extend(getFieldsInOrder(schema))
+        for fieldset in schema.queryTaggedValue(FIELDSETS_KEY, []):
+            fieldset_fields.setdefault(
+                fieldset.__name__, []).extend(fieldset.fields)
+            ordered_fieldsets.append(fieldset.__name__)
+
+        fieldset_fields['default'].extend(non_fieldset_fields(schema))
+
+    ordered_fields = []
+    for fieldset in ordered_fieldsets:
+        ordered_fields.extend(fieldset_fields[fieldset])
+
+    fields.sort(key=lambda field: ordered_fields.index(field[0]))
+    return fields
 
 
 class Dexterity2Surf(GenericObject2Surf):
 
     adapts(IDexterityContent, ISurfSession)
 
+    dc_map = dict([('title', 'title'),
+                   ('description', 'description'),
+                   ('creation_date', 'created'),
+                   ('modification_date', 'modified'),
+                   ('creators', 'creator'),
+                   ('subject', 'subject'),
+                   ('effectiveDate', 'issued'),
+                   ('expirationDate', 'expires'),
+                   ('rights', 'rights'),
+                   ('location', 'spatial')])
+
+    _blacklist = ['constrainTypesMode',
+                  'locallyAllowedTypes',
+                  'immediatelyAddableTypes',
+                  'language',
+                  'allowDiscussion']
+    field_map = {}
+
+    @property
+    def blacklist_map(self):
+        """ These fields shouldn't be exported """
+        ptool = getToolByName(self.context, 'portal_properties')
+        props = getattr(ptool, 'rdfmarshaller_properties', None)
+        if props:
+            return list(
+                props.getProperty('%s_blacklist' % self.portalType.lower(),
+                                  props.getProperty('blacklist'))
+            )
+        else:
+            return self._blacklist
+
     @property
     def portalType(self):
         """ Portal type """
-        return self.context.portal_type.replace(' ', '')
+        return self.context.portal_type.replace(' ', '').replace('.', '')
 
     @property
     def prefix(self):
@@ -30,32 +134,77 @@ class Dexterity2Surf(GenericObject2Surf):
         """ Subject """
         return self.context.absolute_url()
 
+    @property
+    def namespace(self):
+        """ namespace """
+        if self._namespace is not None:
+            return self._namespace
+
+        ttool = getToolByName(self.context, 'portal_types')
+        ftype = ttool[self.context.portal_type]
+        surf.ns.register(**{self.prefix: '%s#' % ftype.absolute_url()})
+        self._namespace = getattr(surf.ns, self.prefix.upper())
+        print "namespace", self._namespace
+        print "prefix", self.prefix
+        return self._namespace
+
     def modify_resource(self, resource, *args, **kwds):
-        plone_portal_state = self.context.restrictedTraverse(
-                '@@plone_portal_state')
-        portal_url = plone_portal_state.portal_url()
+        language = self.context.Language()
+        ptypes = getToolByName(self.context, 'portal_types')
+        fti = ptypes[self.context.portal_type]
 
-        workflowTool = getToolByName(self.context, "portal_workflow")
-        wfs = workflowTool.getWorkflowsFor(self.context)
-        wf = None
-        for wf in wfs:
-            if wf.isInfoSupported(self.context, "portal_workflow"):
-                break
+        # TODO: extract exportables from behaviors
+        for fieldName, field in get_ordered_fields(fti):
+            if fieldName in self.blacklist_map:
+                continue
+            fieldAdapter = queryMultiAdapter(
+                (field, self.context, self.session),
+                interface=IDXField2Surf,
+                name=fieldName
+            )
+            if not fieldAdapter:
+                fieldAdapter = getMultiAdapter(
+                    (field, self.context, self.session),
+                    interface=IDXField2Surf)
+            if not fieldAdapter.exportable:
+                continue
 
-        status = workflowTool.getInfoFor(self.context, "review_state", None)
-        if status is not None:
-            status = ''.join([portal_url,
-                              "/portal_workflow/",
-                              getattr(wf, 'getId', lambda: '')(),
-                              "/states/",
-                              status])
             try:
-                setattr(resource, '%s_%s' % ("eea", "hasWorkflowState"),
-                        rdflib.URIRef(status))
+                value = fieldAdapter.value()
             except Exception:
-                log.log('RDF marshaller error for context[workflow_state]'
-                        '"%s": \n%s: %s' %
-                        (self.context.absolute_url(),
+                log.log('RDF marshaller error for context[field]'
+                        '"%s[%s]": \n%s: %s' %
+                        (self.context.absolute_url(), fieldName,
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
+
+            valueAdapter = queryAdapter(value, interface=IValue2Surf)
+            if valueAdapter:
+                value = valueAdapter(language=language)
+            if not value or value == "None":
+                continue
+
+            prefix = fieldAdapter.prefix or self.prefix
+
+            if fieldAdapter.name:
+                fieldName = fieldAdapter.name
+            elif fieldName in self.field_map:
+                fieldName = self.field_map.get(fieldName)
+            elif fieldName in self.dc_map:
+                fieldName = self.dc_map.get(fieldName)
+                prefix = 'dcterms'
+
+            prefix = prefix.replace('.', '')
+            try:
+                setattr(resource, '%s_%s' % (prefix, fieldName), value)
+            except Exception:
+
+                log.log(
+                    'RDF marshaller error for context[field]'
+                    '"%s[%s]": \n%s: %s' % (
+                        self.context.absolute_url(), fieldName,
+                        sys.exc_info()[0], sys.exc_info()[1]
+                    ),
+                    severity=log.logging.WARN
+                )
         return resource
