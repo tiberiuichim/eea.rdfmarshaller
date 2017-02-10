@@ -30,22 +30,6 @@ class IATField2Surf(Interface):
     exportable = Attribute("Is this field exportable to RDF?")
 
 
-class IValue2Surf(Interface):
-    """Transform a python value in a format suitable for Surf
-    """
-
-    def __call__(*args, **kwds):
-        """Return a value suitable to be assigned as a value to an
-        rdf resource attribute
-        """
-
-class IFieldDefinition2Surf(IGenericObject2Surf):
-    """A three-way adapter to get rdf information from field definitions
-    """
-
-
-#===============[ Marker Interfaces ]=================
-
 class IATVocabulary(Interface):
     """ Marker interface for ATVocabularyManager Simple Vocabulary """
 
@@ -60,4 +44,3 @@ class IReferenceField(IField):
 
 class ITextField(IField):
     """ Marker interface for Products.Archetypes.Field.TextField """
-

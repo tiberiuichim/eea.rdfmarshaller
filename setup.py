@@ -37,6 +37,12 @@ setup(name=name,
           'plone.app.async',
           'eventlet',
       ],
+      extras_require={
+          'test': [
+              'Products.PloneTestCase',
+              'plone.app.testing'
+          ]
+      },
       entry_points="""
       # -*- Entry points: -*-
       """,

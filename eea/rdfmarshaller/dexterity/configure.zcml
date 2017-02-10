@@ -18,6 +18,6 @@
     <adapter factory=".DexterityFTI2Surf" />
     <adapter
         factory=".fields.DexterityField2RdfSchema"
-        provides="eea.rdfmarshaller.archetypes.interfaces.IFieldDefinition2Surf" />
+        provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
 
 </configure>

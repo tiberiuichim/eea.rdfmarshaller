@@ -4,6 +4,7 @@
 
   <include file="profiles.zcml" />
   <include file="patches.zcml" />
+
   <include package=".browser" />
   <include package=".upgrades" />
   <include package=".archetypes" />
@@ -15,5 +16,11 @@
   </class>
 
   <adapter factory=".marshaller.PortalTypesUtil2Surf" />
+
+  <adapter factory=".value.Value2Surf" />
+  <adapter factory=".value.Tuple2Surf" />
+  <adapter factory=".value.List2Surf" />
+  <adapter factory=".value.String2Surf" />
+  <adapter factory=".value.DateTime2Surf" />
 
 </configure>

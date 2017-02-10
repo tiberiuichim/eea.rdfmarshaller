@@ -1,19 +1,10 @@
 """ rdfmarshaller adapters for dexterity content
 """
 
-# from Products.CMFPlone.utils import _createObjectByType
-# from eea.rdfmarshaller.archetypes.interfaces import IATVocabularyTerm
-# from eea.rdfmarshaller.archetypes.interfaces import IArchetype2Surf
-# from eea.rdfmarshaller.interfaces import IObject2Surf
-# from zope.component import adapts
-# from zope.interface import implements   # , Interface
-# import rdflib
-# import surf
-
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
-from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
-from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
+from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
+from eea.rdfmarshaller.interfaces import IValue2Surf
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
@@ -44,6 +35,9 @@ def non_fieldset_fields(schema):
 
 
 def get_ordered_fields(fti):
+    # NOTE: code extracted from collective.excelexport. Original comments
+    # preserved
+
     # this code is much complicated because we have to get sure
     # we get the fields in the order of the fieldsets
     # the order of the fields in the fieldsets can differ
@@ -86,6 +80,8 @@ def get_ordered_fields(fti):
 
 
 class Dexterity2Surf(GenericObject2Surf):
+    """ Dexterity implementation of the Object2Surf
+    """
 
     adapts(IDexterityContent, ISurfSession)
 
@@ -145,8 +141,6 @@ class Dexterity2Surf(GenericObject2Surf):
         ftype = ttool[self.context.portal_type]
         surf.ns.register(**{self.prefix: '%s#' % ftype.absolute_url()})
         self._namespace = getattr(surf.ns, self.prefix.upper())
-        print "namespace", self._namespace
-        print "prefix", self.prefix
         return self._namespace
 
     def modify_resource(self, resource, *args, **kwds):
@@ -154,7 +148,6 @@ class Dexterity2Surf(GenericObject2Surf):
         ptypes = getToolByName(self.context, 'portal_types')
         fti = ptypes[self.context.portal_type]
 
-        # TODO: extract exportables from behaviors
         for fieldName, field in get_ordered_fields(fti):
             if fieldName in self.blacklist_map:
                 continue
@@ -187,7 +180,6 @@ class Dexterity2Surf(GenericObject2Surf):
                 continue
 
             prefix = (fieldAdapter.prefix or self.prefix).replace('.', '')
-            print prefix
 
             fieldName = fieldAdapter.name
             if fieldName in self.field_map:

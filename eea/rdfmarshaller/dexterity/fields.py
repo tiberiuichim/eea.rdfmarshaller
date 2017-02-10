@@ -1,7 +1,7 @@
 from Acquisition import aq_base
 from Products.CMFPlone import log
-from eea.rdfmarshaller.archetypes.fields import Value2Surf
-from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
+from eea.rdfmarshaller.value import Value2Surf
+from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
@@ -38,7 +38,6 @@ class DXField2Surf(object):
         try:
             if callable(value):
                 value = value()
-            print "Returning '{}' for field {}".format(value, self.name)
             return value
         except Exception:
             log.log('RDF marshaller error for context[field]'

@@ -1,11 +1,6 @@
 """ Archetypes
 """
-import sys
 
-import rdflib
-from zope.interface import implements, Interface
-
-import surf
 from OFS.interfaces import IFolder
 from Products.Archetypes.interfaces import IBaseObject
 from Products.Archetypes.interfaces import IField
@@ -16,15 +11,19 @@ from Products.CMFPlone.utils import _createObjectByType
 from eea.rdfmarshaller.archetypes.interfaces import IATField2Surf
 from eea.rdfmarshaller.archetypes.interfaces import IATVocabularyTerm
 from eea.rdfmarshaller.archetypes.interfaces import IArchetype2Surf
-from eea.rdfmarshaller.archetypes.interfaces import IFieldDefinition2Surf
-from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
 from eea.rdfmarshaller.config import DEBUG
+from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession, IObject2Surf
+from eea.rdfmarshaller.interfaces import IValue2Surf
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
+from zope.interface import implements, Interface
+import rdflib
+import surf
+import sys
 
 
 class Archetype2Surf(GenericObject2Surf):
@@ -57,8 +56,9 @@ class Archetype2Surf(GenericObject2Surf):
         ptool = getToolByName(self.context, 'portal_properties')
         props = getattr(ptool, 'rdfmarshaller_properties', None)
         if props:
-            return list(props.getProperty('%s_blacklist' %
-                self.portalType.lower(), props.getProperty('blacklist')))
+            return list(props.getProperty('%s_blacklist'
+                                          % self.portalType.lower(),
+                                          props.getProperty('blacklist')))
         else:
             return self._blacklist
 
@@ -81,7 +81,7 @@ class Archetype2Surf(GenericObject2Surf):
         """ Schema to Surf """
         language = self.context.Language()
         plone_portal_state = self.context.restrictedTraverse(
-                '@@plone_portal_state')
+            '@@plone_portal_state')
         portal_url = plone_portal_state.portal_url()
 
         workflowTool = getToolByName(self.context, "portal_workflow")
@@ -100,12 +100,12 @@ class Archetype2Surf(GenericObject2Surf):
                               status])
             try:
                 setattr(resource, '%s_%s' % ("eea", "hasWorkflowState"),
-                    rdflib.URIRef(status))
+                        rdflib.URIRef(status))
             except Exception:
                 log.log('RDF marshaller error for context[workflow_state]'
                         '"%s": \n%s: %s' %
                         (self.context.absolute_url(),
-                        sys.exc_info()[0], sys.exc_info()[1]),
+                         sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
 
         for field in self.context.Schema().fields():
@@ -113,14 +113,14 @@ class Archetype2Surf(GenericObject2Surf):
             if fieldName in self.blacklist_map:
                 continue
 
-            #first we try with a named adapter, then a generic one
+            # first we try with a named adapter, then a generic one
             fieldAdapter = queryMultiAdapter(
-                            (field, self.context, self.session),
-                            interface=IATField2Surf, name=fieldName)
+                (field, self.context, self.session),
+                interface=IATField2Surf, name=fieldName)
             if not fieldAdapter:
                 fieldAdapter = getMultiAdapter(
-                        (field, self.context, self.session),
-                                interface=IATField2Surf)
+                    (field, self.context, self.session),
+                    interface=IATField2Surf)
 
             if not fieldAdapter.exportable:
                 continue
@@ -132,7 +132,7 @@ class Archetype2Surf(GenericObject2Surf):
                         '"%s[%s]": \n%s: %s' %
                         (self.context.absolute_url(), fieldName,
                          sys.exc_info()[0], sys.exc_info()[1]),
-                         severity=log.logging.WARN)
+                        severity=log.logging.WARN)
 
             valueAdapter = queryAdapter(value, interface=IValue2Surf)
             if valueAdapter:
@@ -158,7 +158,7 @@ class Archetype2Surf(GenericObject2Surf):
                         '"%s[%s]": \n%s: %s' %
                         (self.context.absolute_url(), fieldName,
                          sys.exc_info()[0], sys.exc_info()[1]),
-                         severity=log.logging.WARN)
+                        severity=log.logging.WARN)
 
         return resource
 
@@ -173,14 +173,14 @@ class ATFolderish2Surf(Archetype2Surf):
         """ AT to Surf """
         currentLevel += 1
         resource = super(ATFolderish2Surf, self).modify_resource(
-                         resource, currentLevel=currentLevel, endLevel=endLevel)
+            resource, currentLevel=currentLevel, endLevel=endLevel)
         if currentLevel <= endLevel or endLevel == 0:
             resource.dcterms_hasPart = []
 
             catalog = getToolByName(self.context, 'portal_catalog')
-            contentFilter = {'path':
-                {'query': '/'.join(self.context.getPhysicalPath()),
-                 'depth': 1}}
+            contentFilter = {
+                'path': {'query': '/'.join(self.context.getPhysicalPath()),
+                         'depth': 1}}
             objs = [b.getObject() for b in catalog(contentFilter,
                                                    review_state='published',
                                                    show_all=1,
@@ -188,7 +188,7 @@ class ATFolderish2Surf(Archetype2Surf):
 
             for obj in objs:
                 resource.dcterms_hasPart.append(rdflib.URIRef(
-                                                    obj.absolute_url()))
+                    obj.absolute_url()))
         return resource
 
 
@@ -271,7 +271,6 @@ class FTI2Surf(GenericObject2Surf):
     def modify_resource(self, resource, *args, **kwds):
         """ Schema to Surf """
 
-        import pdb; pdb.set_trace()
         context = self.context
         session = self.session
 
@@ -288,20 +287,20 @@ class FTI2Surf(GenericObject2Surf):
 
         portal_type = context.getId()
         tmpFolder = getToolByName(context, 'portal_url').getPortalObject().\
-                            portal_factory._getTempFolder(portal_type)
+            portal_factory._getTempFolder(portal_type)
         instance = getattr(tmpFolder, 'rdfstype', None)
 
         if instance is None:
             try:
                 instance = _createObjectByType(portal_type, tmpFolder,
                                                'rdfstype')
-            except Exception:   #might be a tool class
+            except Exception:  # might be a tool class
                 if DEBUG:
                     raise
                 log.log('RDF marshaller error for FTI "%s": \n%s: %s' %
                         (context.absolute_url(),
                          sys.exc_info()[0], sys.exc_info()[1]),
-                         severity=log.logging.WARN)
+                        severity=log.logging.WARN)
 
                 return resource
             finally:
@@ -319,7 +318,7 @@ class FTI2Surf(GenericObject2Surf):
                     continue
 
                 field2surf = queryMultiAdapter((field, context, session),
-                                                interface=IFieldDefinition2Surf)
+                                               interface=IFieldDefinition2Surf)
                 field2surf.write()
 
         return resource
@@ -335,5 +334,4 @@ class ATVocabularyTerm2Surf(Archetype2Surf):
     def blacklist_map(self):
         """ Blacklist map """
         return super(ATVocabularyTerm2Surf, self).blacklist_map + \
-                ['creation_date', 'modification_date', 'creators']
-
+            ['creation_date', 'modification_date', 'creators']

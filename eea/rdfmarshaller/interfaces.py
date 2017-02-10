@@ -1,4 +1,5 @@
 """ Interfaces """
+
 from zope.interface import Interface, Attribute
 
 
@@ -41,3 +42,18 @@ class ISurfResourceModifier(Interface):
     def run(resource):
         """Gets the rdf resource as argument, to allow it to be changed in place
         """
+
+
+class IValue2Surf(Interface):
+    """Transform a python value in a format suitable for Surf
+    """
+
+    def __call__(*args, **kwds):
+        """Return a value suitable to be assigned as a value to an
+        rdf resource attribute
+        """
+
+
+class IFieldDefinition2Surf(IGenericObject2Surf):
+    """A three-way adapter to get rdf information from field definitions
+    """

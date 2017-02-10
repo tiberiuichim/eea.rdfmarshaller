@@ -14,7 +14,7 @@
     for="Products.Archetypes.interfaces.IBaseFolder eea.rdfmarshaller.interfaces.ISurfSession"
     provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
 
-  <adapter factory=".ATField2RdfSchema" provides="eea.rdfmarshaller.archetypes.interfaces.IFieldDefinition2Surf" />
+  <adapter factory=".ATField2RdfSchema" provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
   <adapter factory=".FTI2Surf" />
 
   <adapter factory=".fields.ATField2Surf" />
@@ -29,12 +29,6 @@
              eea.rdfmarshaller.interfaces.ISurfSession" />
 
   <adapter factory=".fields.ATReferenceField2Surf" />
-
-  <adapter factory=".fields.Value2Surf" />
-  <adapter factory=".fields.Tuple2Surf" />
-  <adapter factory=".fields.List2Surf" />
-  <adapter factory=".fields.String2Surf" />
-  <adapter factory=".fields.DateTime2Surf" />
 
   <subscriber factory=".modifiers.IsPartOfModifier"
           provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />

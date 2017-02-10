@@ -21,7 +21,6 @@ class WorkflowStateModifier(object):
     def run(self, resource, *args, **kwds):
         """Change the rdf resource
         """
-        print "running worflow state modifier"
         plone_portal_state = self.context.restrictedTraverse(
                 '@@plone_portal_state')
         portal_url = plone_portal_state.portal_url()
