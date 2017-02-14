@@ -15,6 +15,9 @@
     <adapter factory=".fields.DXField2Surf" />
     <adapter factory=".fields.RichValue2Surf" />
 
+    <adapter factory=".fields.DXRelationList2Surf" />
+    <adapter factory=".fields.RelationValue2Surf" />
+
     <adapter factory=".DexterityFTI2Surf" />
     <adapter
         factory=".fields.DexterityField2RdfSchema"
