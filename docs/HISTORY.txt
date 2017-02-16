@@ -1,8 +1,12 @@
 Changelog
 =========
 
-9.1.dev0 - (unreleased)
+9.1.dev1 - (unreleased)
 -----------------------
+* Feature: added compatiblity with plone.dexterity content types
+* Change: refactored Archetypes support, to extract bits reused in
+  Dexterity compatibility implementation
+  [tiberich #79312]
 
 9.0 - (2017-01-30)
 ------------------
