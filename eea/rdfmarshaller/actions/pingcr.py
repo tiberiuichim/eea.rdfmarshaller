@@ -20,6 +20,7 @@ from zope.formlib import form
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
+from eea.rdfmarshaller.actions.datamanager import queue_callback
 
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
@@ -236,7 +237,7 @@ class PingCRView(BrowserView):
         options['create'] = False
         options['service_to_ping'] = 'http://semantic.eea.europa.eu/ping'
         options['obj_url'] = url
-        ping_CRSDS(context, options)
+        queue_callback(lambda: ping_CRSDS(context, options))
 
 def ping_CRSDS(context, options):
     """ Ping the CR/SDS service
