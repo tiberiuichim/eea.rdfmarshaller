@@ -3,7 +3,7 @@ Changelog
 
 9.1.dev1 - (unreleased)
 -----------------------
-* Feature: added compatiblity with collective.cover.content
+* Feature: added compatiblity with collective.cover
   [iulianpetchesi #79312]
 * Feature: added compatiblity with plone.dexterity content types
 * Change: refactored Archetypes support, to extract bits reused in
