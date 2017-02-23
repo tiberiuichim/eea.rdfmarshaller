@@ -1,6 +1,6 @@
 from Acquisition import aq_base
 from Products.CMFPlone import log
-from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
+from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf, ICoverFields2Surf
 from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
@@ -134,3 +134,47 @@ class RelationValue2Surf(Value2Surf):
         value = self.value
         obj = value.to_object
         return rdflib.URIRef(obj.absolute_url())
+
+
+class CoverFields2Surf(object):
+    """Base implementation of ICoverFields2Surf """
+
+    implements(ICoverFields2Surf)
+    adapts(Interface, Interface, ISurfSession)
+
+    exportable = True
+    prefix = None   # override the prefix for this predicate
+    name = None     # this will be the predicate name (fieldname)
+
+    def __init__(self, field, context, session):
+        self.field = field
+        self.context = context
+        self.session = session
+
+        if self.field.__name__ == 'cover_layout':
+            self.field.__name__ = 'cover_tiles'
+        self.name = self.field.__name__
+
+    def value(self):
+        """ Value """
+        value = getattr(aq_base(self.context), self.name, None)
+
+        if self.name == 'cover_tiles':
+            uids = self.context.list_tiles()
+            value = ''
+            for uid in uids:
+                tile = self.context.get_tile(uid)
+                text = tile.data.get('text', None)
+                if text:
+                    value += text.output
+        try:
+            if callable(value):
+                value = value()
+            return value
+        except Exception:
+            log.log('RDF marshaller error for context[field]'
+                    '"%s[%s]": \n%s: %s' %
+                    (self.context.absolute_url(), self.name,
+                     sys.exc_info()[0], sys.exc_info()[1]),
+                    severity=log.logging.WARN)
+            return None

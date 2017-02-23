@@ -3,9 +3,10 @@
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
+from collective.cover.content import Cover
 from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.interfaces import IValue2Surf
-from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
+from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf, ICoverFields2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from plone.autoform.interfaces import IFormFieldProvider
@@ -260,5 +261,126 @@ class DexterityFTI2Surf(GenericObject2Surf):
                 # TODO: log a warning
                 continue
             field2surf.write()
+
+        return resource
+
+
+class Cover2Surf(GenericObject2Surf):
+    """ Cover implementation of the Object2Surf
+    """
+    adapts(Cover, ISurfSession)
+
+    dc_map = dict([('title', 'title'),
+                   ('description', 'description'),
+                   ('creation_date', 'created'),
+                   ('ModificationDate', 'modified'),
+                   ('Creator', 'creator'),
+                   ('EffectiveDate', 'issued'),
+                   ('ExpirationDate', 'expires')])
+
+    _blacklist = ['constrainTypesMode',
+                  'locallyAllowedTypes',
+                  'immediatelyAddableTypes',
+                  'language',
+                  'allowDiscussion']
+    field_map = {}
+
+    @property
+    def blacklist_map(self):
+        """ These fields shouldn't be exported """
+        ptool = getToolByName(self.context, 'portal_properties')
+        props = getattr(ptool, 'rdfmarshaller_properties', None)
+        if props:
+            return list(
+                props.getProperty('%s_blacklist' % self.portalType.lower(),
+                                  props.getProperty('blacklist'))
+            )
+        else:
+            return self._blacklist
+
+    @property
+    def portalType(self):
+        """ Portal type """
+        return self.context.portal_type.replace(' ', '').replace('.', '')
+
+    @property
+    def prefix(self):
+        """ Prefix """
+        return self.portalType.lower()
+
+    @property
+    def subject(self):
+        """ Subject """
+        return self.context.absolute_url()
+
+    @property
+    def namespace(self):
+        """ namespace """
+        if self._namespace is not None:
+            return self._namespace
+
+        ttool = getToolByName(self.context, 'portal_types')
+        ftype = ttool[self.context.portal_type]
+        surf.ns.register(**{self.prefix: '%s#' % ftype.absolute_url()})
+        self._namespace = getattr(surf.ns, self.prefix.upper())
+        return self._namespace
+
+    def modify_resource(self, resource, *args, **kwds):
+        language = self.context.Language()
+        ptypes = getToolByName(self.context, 'portal_types')
+        fti = ptypes[self.context.portal_type]
+
+        for fieldName, field in get_ordered_fields(fti):
+            if fieldName in self.blacklist_map:
+                continue
+            fieldAdapter = queryMultiAdapter(
+                (field, self.context, self.session),
+                interface=ICoverFields2Surf,
+                name=fieldName
+            )
+            if not fieldAdapter:
+                fieldAdapter = getMultiAdapter(
+                    (field, self.context, self.session),
+                    interface=ICoverFields2Surf)
+            if not fieldAdapter.exportable:
+                continue
+
+            try:
+                value = fieldAdapter.value()
+            except Exception:
+                log.log('RDF marshaller error for context[field]'
+                        '"%s[%s]": \n%s: %s' %
+                        (self.context.absolute_url(), fieldName,
+                         sys.exc_info()[0], sys.exc_info()[1]),
+                        severity=log.logging.WARN)
+                continue
+
+            valueAdapter = queryAdapter(value, interface=IValue2Surf)
+            if valueAdapter:
+                value = valueAdapter(language=language)
+            if not value or value == "None":
+                continue
+
+            prefix = (fieldAdapter.prefix or self.prefix).replace('.', '')
+
+            fieldName = fieldAdapter.name
+            if fieldName in self.field_map:
+                fieldName = self.field_map.get(fieldName)
+            elif fieldName in self.dc_map:
+                fieldName = self.dc_map.get(fieldName)
+                prefix = 'dcterms'
+
+            try:
+                setattr(resource, '%s_%s' % (prefix, fieldName), value)
+            except Exception:
+
+                log.log(
+                    'RDF marshaller error for context[field]'
+                    '"%s[%s]": \n%s: %s' % (
+                        self.context.absolute_url(), fieldName,
+                        sys.exc_info()[0], sys.exc_info()[1]
+                    ),
+                    severity=log.logging.WARN
+                )
 
         return resource
