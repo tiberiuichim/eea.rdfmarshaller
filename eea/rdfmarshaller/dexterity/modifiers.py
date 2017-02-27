@@ -1,5 +1,6 @@
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
+from collective.cover.interfaces import ICover
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from plone.dexterity.interfaces import IDexterityContent
 from zope.component import adapts
@@ -45,6 +46,36 @@ class WorkflowStateModifier(object):
             except Exception:
                 log.log('RDF marshaller error for context[workflow_state]'
                         '"%s": \n%s: %s' %
+                        (self.context.absolute_url(),
+                         sys.exc_info()[0], sys.exc_info()[1]),
+                        severity=log.logging.WARN)
+        return resource
+
+
+class CoverTilesModifier(object):
+    implements(ISurfResourceModifier)
+    adapts(ICover)
+
+    def __init__(self, context):
+        self.context = context
+
+    def run(self, resource, *args, **kwds):
+        """Change the rdf resource
+        """
+        uids = self.context.list_tiles()
+        value = ''
+        for uid in uids:
+            tile = self.context.get_tile(uid)
+            text = tile.data.get('text', None)
+            if text:
+                value += text.output
+        if value:
+            try:
+                setattr(resource, '%s_%s' % ("eea", "cover_tiles"),
+                        [value])
+            except Exception:
+                log.log('RDF marshaller error for context[tiles]'
+                        '"%s[": \n%s: %s' %
                         (self.context.absolute_url(),
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)

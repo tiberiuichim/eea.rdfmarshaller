@@ -23,13 +23,15 @@
         factory=".fields.DexterityField2RdfSchema"
         provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
 
-    <adapter factory=".fields.CoverFields2Surf" />
     <adapter factory=".Cover2Surf"
         provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
 
     <adapter factory=".Cover2Surf"
         for="collective.cover.interfaces.ICover eea.rdfmarshaller.interfaces.ISurfSession"
         provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
+
+    <subscriber factory=".modifiers.CoverTilesModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
     <browser:page
       for="collective.cover.interfaces.ICover"
