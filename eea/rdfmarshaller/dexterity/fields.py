@@ -102,7 +102,7 @@ class DexterityField2RdfSchema(GenericObject2Surf):
         setattr(resource, 'rdfs_label', widget_label)
         setattr(resource, 'rdfs_comment', widget_description)
         setattr(resource, 'rdf_id', self.rdfId)
-        setattr(resource, 'rdf_domain', fti_title)
+        setattr(resource, 'rdf_domain', fti_title.replace(' ', ''))
         return resource
 
 
