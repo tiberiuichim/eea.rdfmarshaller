@@ -5,11 +5,11 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
 from collective.cover.interfaces import ICover
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
+from plone.app.contenttypes.interfaces import IImage, IFile
 from plone.dexterity.interfaces import IDexterityContent
 import rdflib
 from zope.component import adapts
 from zope.interface import implements, providedBy
-from plone.app.contenttypes.interfaces import IImage, IFile
 
 has_plone_multilingual = True
 try:
@@ -217,6 +217,9 @@ class RelatedItemsModifier(object):
 
 # This one comes from eea.dataservices
 class BaseFileModifier(object):
+    """Adds dcterms:format
+    """
+
     field = ''
 
     implements(ISurfResourceModifier)
