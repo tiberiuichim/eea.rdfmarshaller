@@ -3,7 +3,7 @@
            xmlns:browser="http://namespaces.zope.org/browser">
 
   <browser:page
-    for="plone.dexterity.interfaces.IDexterityContainer"
+    for="plone.dexterity.interfaces.IDexterityContent"
     name="rdf"
     class=".export.RDFExport"
     permission="zope2.View"

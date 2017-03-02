@@ -3,6 +3,9 @@ Changelog
 
 9.1.dev1 - (unreleased)
 -----------------------
+* Feature: Ported modifiers from archetypes to dexterity, added rdf support
+  for files and images and excluded some dc fields from the rdf schema
+  [iulianpetchesi #82861]
 * Feature: added compatiblity with collective.cover
   [iulianpetchesi #79312]
 * Feature: added compatiblity with plone.dexterity content types

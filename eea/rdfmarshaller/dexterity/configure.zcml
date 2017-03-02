@@ -23,20 +23,28 @@
         factory=".fields.DexterityField2RdfSchema"
         provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
 
-    <adapter factory=".Cover2Surf"
-        provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
-
-    <adapter factory=".Cover2Surf"
-        for="collective.cover.interfaces.ICover eea.rdfmarshaller.interfaces.ISurfSession"
-        provides="eea.rdfmarshaller.interfaces.IObject2Surf" />
-
     <subscriber factory=".modifiers.CoverTilesModifier"
         provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
-    <browser:page
-      for="collective.cover.interfaces.ICover"
-      name="rdf"
-      class="eea.rdfmarshaller.browser.export.RDFExport"
-      permission="zope2.View"
-      />
+    <subscriber factory=".modifiers.IsPartOfModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.TranslationInfoModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.ProvidedInterfacesModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.SearchableTextInModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.RelatedItemsModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.ImageModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
+    <subscriber factory=".modifiers.FileModifier"
+        provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
+
 </configure>
