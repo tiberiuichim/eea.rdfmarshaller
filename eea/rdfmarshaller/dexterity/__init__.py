@@ -3,7 +3,6 @@
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
-from collective.cover.content import Cover
 from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.interfaces import IValue2Surf
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
@@ -230,7 +229,11 @@ class DexterityFTI2Surf(GenericObject2Surf):
                      'rights',
                      'nextPreviousEnabled',
                      'excludeFromNav',
-                     'creator'
+                     'creator',
+                     'title',
+                     'exclude_from_nav',
+                     'effective',
+                     'expires'
                      ]
 
     def modify_resource(self, resource, *args, **kwds):
@@ -263,12 +266,3 @@ class DexterityFTI2Surf(GenericObject2Surf):
             field2surf.write()
 
         return resource
-
-
-class Cover2Surf(GenericObject2Surf):
-    """ Cover implementation of the Object2Surf
-    """
-    adapts(Cover, ISurfSession)
-
-    _namespace = surf.ns.RDFS
-    _prefix = 'rdfs'
