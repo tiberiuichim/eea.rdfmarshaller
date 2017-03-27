@@ -1,6 +1,9 @@
 Changelog
 =========
 
+9.2.dev0 - (unreleased)
+-----------------------
+
 9.1 - (2017-03-27)
 ------------------
 * Change: rollback changes done in 8.9 where rdf export
