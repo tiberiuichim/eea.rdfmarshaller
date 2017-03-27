@@ -3,6 +3,9 @@ Changelog
 
 9.1.dev0 - (unreleased)
 -----------------------
+* Change: rollback changes done in 8.9 where rdf export
+  ignored non ascii characters as we loose multilingual data
+  [ichim-david refs #83543]
 
 9.0 - (2017-01-30)
 ------------------
