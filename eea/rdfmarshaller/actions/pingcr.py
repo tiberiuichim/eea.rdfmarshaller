@@ -196,6 +196,9 @@ class PingCRActionExecutor(object):
 
         default_url = conf.environment.get('portal_url', portal_url)
 
+        # Force ping_cr on HTTP to fit Virtuoso triples
+        default_url = default_url.replace('https://', 'http://', 1)
+
         if default_url != portal_url:
             url = url.replace(unicode(portal_url), unicode(default_url))
             url = url.replace('SITE/', '')

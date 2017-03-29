@@ -3,6 +3,8 @@ Changelog
 
 9.2.dev0 - (unreleased)
 -----------------------
+* Change: Force ping_cr on HTTP
+  [avoinea - refs #83686]
 
 9.1 - (2017-03-27)
 ------------------
