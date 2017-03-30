@@ -1,10 +1,7 @@
 Changelog
 =========
 
-9.4.dev0 - (unreleased)
------------------------
-
-9.3 - (2017-03-30)
+9.3.dev0 - (unreleased)
 ------------------
 * Change: Registered FOAF namespace
 * Change: Added /scripts for fast experimentation with
