@@ -1,8 +1,15 @@
 Changelog
 =========
 
-9.3.dev0 - (unreleased)
+9.4.dev0 - (unreleased)
 -----------------------
+
+9.3 - (2017-03-30)
+------------------
+* Change: Registered FOAF namespace
+* Change: Added /scripts for fast experimentation with
+  surf/rdfmarshaller
+  [zoleesan - refs #83153]
 
 9.2 - (2017-03-29)
 ------------------

@@ -68,6 +68,9 @@ class RDFMarshaller(Marshaller):
         store.reader.graph.bind('schema',
                                 surf.ns.SCHEMA,
                                 override=True)
+        store.reader.graph.bind('foaf',
+                                surf.ns.FOAF,
+                                override=True)
 
         self._store = store
         return store
