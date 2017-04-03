@@ -1,0 +1,8 @@
+Fast experimentation with surf/rdfmarshaller
+============================================
+
+Use the playground.py script to easily experiment with the surf.rdflib API. It has
+an integrated environment and an easy to start example.
+
+You can either run this script with the zopepy script from the EEA buildout, or create
+a new virtualenv then install the dependencies: bin/pip install -r requirements
