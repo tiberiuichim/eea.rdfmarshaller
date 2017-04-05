@@ -29,6 +29,7 @@ setup(name=name,
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'Unidecode',
           'uuid',
           'surf',
           'surf.rdflib',

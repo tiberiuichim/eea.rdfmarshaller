@@ -89,7 +89,7 @@ class String2Surf(Value2Surf):
         language = kwds['language']
         encoding = detect(self.value)['encoding']
 
-        if encoding in nonEUencodings:
+        if not encoding or encoding in nonEUencodings:
             value = self.value.decode('utf-8', 'replace')
         else:
             try:

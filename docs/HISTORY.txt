@@ -2,7 +2,9 @@ Changelog
 =========
 
 9.3.dev0 - (unreleased)
-------------------
+-----------------------
+* Bug fix: Improved RDF export sanitize method
+  [avoinea - refs #83543]
 * Change: Registered FOAF namespace
 * Change: Added /scripts for fast experimentation with
   surf/rdfmarshaller
