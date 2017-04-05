@@ -3,7 +3,7 @@ import os
 from Products.Marshall.registry import getComponent
 from unidecode import unidecode
 try:
-    LIMIT = int(os.environ.get("EEARDF_UNICODE_LIMIT", 65535))
+    LIMIT = int(os.environ.get("RDF_UNICODE_LIMIT", 65535))
 except Exception:
     LIMIT = 65535 # Refs #83543 - Default: 0xFFFF, 2^16, 16-bit
 
