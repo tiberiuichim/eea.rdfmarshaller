@@ -63,39 +63,42 @@ def modify(session):
 
     obj.update()
 
-    # Result:
-    # <?xml version="1.0" encoding="utf-8"?>
-    # <rdf:RDF
-    #   xmlns:foaf='http://xmlns.com/foaf/0.1/'
-    #   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-    #   xmlns:eea='http://www.eea.europa.eu/ontologies.rdf#'
-    #   xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
-    #   xmlns:schema='http://schema.org/'
-    # >
-    #   <eea:Indicator rdf:about="http://example.com/indicatorA">
-    #     <foaf:depiction>
-    #       <schema:Image rdf:about="http://example.com/indicator-icon.png">
-    #         <rdfs:label>type_icon</rdfs:label>
-    #       </schema:Image>
-    #     </foaf:depiction>
-    #     <foaf:depiction>
-    #       <schema:Image rdf:about="http://example.com/portal/example">
-    #         <schema:logo>http://example.com/indicator.jpg</schema:logo>
-    #         <rdfs:label>depiction</rdfs:label>
-    #         <schema:thumbnail rdf:resource="http://example.com/something/image_large"/>
-    #         <schema:thumbnail rdf:resource="http://example.com/something-else/image_large"/>
-    #       </schema:Image>
-    #     </foaf:depiction>
-    #   </eea:Indicator>
-    #   <schema:Image rdf:about="http://example.com/something/image_large">
-    #     <schema:width>400px</schema:width>
-    #     <schema:height>200px</schema:height>
-    #   </schema:Image>
-    #   <schema:Image rdf:about="http://example.com/something-else/image_large">
-    #     <schema:width>400px</schema:width>
-    #     <schema:height>200px</schema:height>
-    #   </schema:Image>
-    # </rdf:RDF>
+# Result:
+# <?xml version="1.0" encoding="utf-8"?>
+# <rdf:RDF
+#   xmlns:foaf='http://xmlns.com/foaf/0.1/'
+#   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+#   xmlns:eea='http://www.eea.europa.eu/ontologies.rdf#'
+#   xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'
+#   xmlns:schema='http://schema.org/'
+# >
+#   <eea:Indicator rdf:about="http://example.com/indicatorA">
+#     <foaf:depiction>
+#       <schema:Image rdf:about="http://example.com/indicator-icon.png">
+#         <rdfs:label>type_icon</rdfs:label>
+#       </schema:Image>
+#     </foaf:depiction>
+#     <foaf:depiction>
+#       <schema:Image rdf:about="http://example.com/portal/example">
+#         <schema:logo>http://example.com/indicator.jpg</schema:logo>
+#         <rdfs:label>depiction</rdfs:label>
+#         <schema:thumbnail
+#           rdf:resource="http://example.com/something/image_large"/>
+#         <schema:thumbnail
+#           rdf:resource="http://example.com/something-else/image_large"/>
+#       </schema:Image>
+#     </foaf:depiction>
+#   </eea:Indicator>
+#   <schema:Image rdf:about="http://example.com/something/image_large">
+#     <schema:width>400px</schema:width>
+#     <schema:height>200px</schema:height>
+#   </schema:Image>
+#   <schema:Image
+#     rdf:about="http://example.com/something-else/image_large">
+#     <schema:width>400px</schema:width>
+#     <schema:height>200px</schema:height>
+#   </schema:Image>
+# </rdf:RDF>
 
 
 def main():
