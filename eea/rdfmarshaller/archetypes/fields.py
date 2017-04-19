@@ -149,8 +149,8 @@ class ATFileField2Surf(ATField2Surf):
     adapts(IFileField, Interface, ISurfSession)
 
     exportable = True
-    prefix = "eea"
-    name = "fileInfo"
+    # prefix = "eea"
+    # name = "fileInfo"
 
     def value(self):
         """ The desired output is similar to:
@@ -163,24 +163,32 @@ class ATFileField2Surf(ATField2Surf):
         ...
         </datafile:DataFile>
         """
-        #only the size and download ULR are returned
-        Distribution = self.session.get_class(surf.ns.DCAT.Distribution)
-        fileDistribution = self.session.get_resource('#distribution',
-                                                     Distribution)
+        return ''
 
-        value = self.field.getAccessor(self.context)()
-        # 22047 check if value isn't a false value, images with no data
-        # will return an empty string
-        size = value.get_size() if value else 0
-        fileDistribution[surf.ns.DCAT['sizeInBytes']] = size
+        name = self.field.getName()
+        url = "{0}/at_download/{1}".format(
+            rdflib.URIRef(self.context.absolute_url(), name)
+        )
+        return [url]
 
-        url = ''.join([self.context.absolute_url(),
-                       "/at_download/",
-                       self.field.getName()])
-        fileDistribution[surf.ns.DCAT['downloadURL']] = rdflib.URIRef(url)
-        fileDistribution.update()
-
-        return [fileDistribution]
+        # only the size and download ULR are returned
+        # Distribution = self.session.get_class(surf.ns.DCAT.Distribution)
+        # fileDistribution = self.session.get_resource('#distribution',
+        #                                              Distribution)
+        #
+        # value = self.field.getAccessor(self.context)()
+        # # 22047 check if value isn't a false value, images with no data
+        # # will return an empty string
+        # size = value.get_size() if value else 0
+        # fileDistribution[surf.ns.DCAT['sizeInBytes']] = size
+        #
+        # url = ''.join([self.context.absolute_url(),
+        #                "/at_download/",
+        #                self.field.getName()])
+        # fileDistribution[surf.ns.DCAT['downloadURL']] = rdflib.URIRef(url)
+        # fileDistribution.update()
+        #
+        # return [fileDistribution]
 
 
 class ATReferenceField2Surf(ATField2Surf):
