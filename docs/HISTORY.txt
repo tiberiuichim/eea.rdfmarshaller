@@ -3,6 +3,8 @@ Changelog
 
 9.1.dev1 - (unreleased)
 -----------------------
+* Feature: Added IValue2Surf implementation for sets and fields to the dc_map
+  [iulianpetchesi #84170]
 * Feature: Ported modifiers from archetypes to dexterity, added rdf support
   for files and images and excluded some dc fields from the rdf schema
   [iulianpetchesi #82861]

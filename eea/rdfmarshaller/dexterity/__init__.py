@@ -91,10 +91,13 @@ class Dexterity2Surf(GenericObject2Surf):
                    ('modification_date', 'modified'),
                    ('creators', 'creator'),
                    ('subject', 'subject'),
-                   ('effectiveDate', 'issued'),
-                   ('expirationDate', 'expires'),
+                   # ('effectiveDate', 'issued'),
+                   # ('expirationDate', 'expires'),
                    ('rights', 'rights'),
-                   ('location', 'spatial')])
+                   # ('contributors', 'contributor'),
+                   ('effective', 'issued'),
+                   ('expires', 'expires'),
+                   ('id', 'productID')])
 
     _blacklist = ['constrainTypesMode',
                   'locallyAllowedTypes',
