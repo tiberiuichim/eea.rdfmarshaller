@@ -60,4 +60,3 @@ class IReferenceField(IField):
 
 class ITextField(IField):
     """ Marker interface for Products.Archetypes.Field.TextField """
-

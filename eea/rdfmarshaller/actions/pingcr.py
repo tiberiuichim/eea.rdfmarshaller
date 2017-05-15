@@ -2,11 +2,13 @@
 """
 import logging
 import urllib
-from zope import schema
-
 import lxml.etree
+from zope import schema
 from zope.interface import implements, Interface
-
+from zope.component import adapts, getUtility, ComponentLookupError
+from zope.formlib import form
+from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectRemovedEvent
 from App.config import getConfiguration
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import getToolByName
@@ -15,10 +17,7 @@ from eventlet.green import urllib2
 from plone.app.async.interfaces import IAsyncService
 from plone.app.contentrules.browser.formhelper import AddForm, EditForm
 from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-from zope.component import adapts, getUtility, ComponentLookupError
-from zope.formlib import form
-from zope.lifecycleevent.interfaces import IObjectAddedEvent
-from zope.lifecycleevent.interfaces import IObjectRemovedEvent
+
 from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 
 try:

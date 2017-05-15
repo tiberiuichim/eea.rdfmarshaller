@@ -1,12 +1,11 @@
 """ Archetypes fields
 """
 import sys
-
-import rdflib
 import re
-from zope.interface import implements, Interface
-
+import rdflib
 import surf
+from zope.interface import implements, Interface
+from zope.component import adapts
 from DateTime.DateTime import DateTime
 from Products.Archetypes.interfaces import IField, IFileField
 from Products.CMFPlone import log
@@ -15,7 +14,6 @@ from eea.rdfmarshaller.archetypes.interfaces import IATField2Surf
 from eea.rdfmarshaller.archetypes.interfaces import IReferenceField
 from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
-from zope.component import adapts
 
 
 #import logging
@@ -200,4 +198,3 @@ class ATReferenceField2Surf(ATField2Surf):
         value = [v for v in value if v] #the field might have been empty
 
         return [rdflib.URIRef(obj.absolute_url()) for obj in value]
-

@@ -1,11 +1,13 @@
 """ Archetypes
 """
 import sys
-
 import rdflib
-from zope.interface import implements, Interface
-
 import surf
+from zope.interface import implements, Interface
+from zope.component import adapts
+from zope.component import getMultiAdapter
+from zope.component import queryAdapter
+from zope.component import queryMultiAdapter
 from OFS.interfaces import IFolder
 from Products.Archetypes.interfaces import IBaseObject
 from Products.Archetypes.interfaces import IField
@@ -21,10 +23,6 @@ from eea.rdfmarshaller.archetypes.interfaces import IValue2Surf
 from eea.rdfmarshaller.config import DEBUG
 from eea.rdfmarshaller.interfaces import ISurfSession, IObject2Surf
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
-from zope.component import adapts
-from zope.component import getMultiAdapter
-from zope.component import queryAdapter
-from zope.component import queryMultiAdapter
 
 
 class Archetype2Surf(GenericObject2Surf):
@@ -335,4 +333,3 @@ class ATVocabularyTerm2Surf(Archetype2Surf):
         """ Blacklist map """
         return super(ATVocabularyTerm2Surf, self).blacklist_map + \
                 ['creation_date', 'modification_date', 'creators']
-
