@@ -1,4 +1,4 @@
-""" Archetypes fields
+""" Archetypes Field2Surf field adapters
 """
 
 from Products.Archetypes.interfaces import IField, IFileField
@@ -49,38 +49,45 @@ class ATFileField2Surf(ATField2Surf):
     adapts(IFileField, Interface, ISurfSession)
 
     exportable = True
-    prefix = "eea"
-    name = "fileInfo"
+
+    @property
+    def name(self):
+        return self.field.getName()
 
     def value(self):
         """ The desired output is similar to:
-        <datafile:DataFile ...
-        ...
-        <eea:fileInfo>
-         <dcat:Distribution rdf:about="#dist">
-          <dcat:sizeInBytes rdf:datatype="XMLSchema#long">X</dcat:sizeInBytes>
-          <dcat:downloadURL rdf:resource="[url]/at_download/file"/>
-        ...
-        </datafile:DataFile>
-        """
-        # only the size and download ULR are returned
-        Distribution = self.session.get_class(surf.ns.DCAT.Distribution)
-        fileDistribution = self.session.get_resource('#distribution',
-                                                     Distribution)
+        <report:file>
+          <schema:MediaObject rdf:about="http://random-url/file">
+            <eea:fileInfo rdf:resource="http://random-url/file#fileInfo"/>
+          </schema:MediaObject>
+        </report:file>
 
-        value = self.field.getAccessor(self.context)()
+        TODO: show real output
+        """
+
+        name = self.field.getName()
+        base_url = self.context.absolute_url()
+        field_url = "{0}/{1}".format(base_url, name)
+        download_url = '{0}/at_download/{1}'.format(base_url, name)
+
         # 22047 check if value isn't a false value, images with no data
         # will return an empty string
+        value = self.field.getAccessor(self.context)()
         size = value.get_size() if value else 0
-        fileDistribution[surf.ns.DCAT['sizeInBytes']] = size
 
-        url = ''.join([self.context.absolute_url(),
-                       "/at_download/",
-                       self.field.getName()])
-        fileDistribution[surf.ns.DCAT['downloadURL']] = rdflib.URIRef(url)
-        fileDistribution.update()
+        Distribution = self.session.get_class(surf.ns.DCAT['Distribution'])
+        dist = Distribution(field_url + "#fileInfo")
+        dist.dcat_sizeInBytes = size
+        dist.dcat_downloadURL = rdflib.URIRef(download_url)
+        dist.update()
 
-        return [fileDistribution]
+        MediaObject = self.session.get_class(surf.ns.SCHEMA['MediaObject'])
+        ff = MediaObject(field_url)
+        ff.eea_fileInfo = dist
+        ff.update()
+        ff.save()
+
+        return rdflib.URIRef(field_url)
 
 
 class ATReferenceField2Surf(ATField2Surf):

@@ -2,10 +2,9 @@
 
 import logging
 import sys
-
-from zope.interface import implements, Interface
-
 import surf
+from zope.interface import implements, Interface
+from zope.component import adapts, queryMultiAdapter, subscribers
 from Products.Archetypes.Marshall import Marshaller
 from Products.CMFCore.interfaces._tools import ITypesTool
 from Products.CMFCore.utils import getToolByName
@@ -13,7 +12,6 @@ from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import IGenericObject2Surf, IObject2Surf
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from eea.rdfmarshaller.interfaces import ISurfSession   #, IReferenceField
-from zope.component import adapts, queryMultiAdapter, subscribers
 
 DEBUG = False
 
@@ -67,6 +65,9 @@ class RDFMarshaller(Marshaller):
                                 override=True)
         store.reader.graph.bind('schema',
                                 surf.ns.SCHEMA,
+                                override=True)
+        store.reader.graph.bind('foaf',
+                                surf.ns.FOAF,
                                 override=True)
 
         self._store = store

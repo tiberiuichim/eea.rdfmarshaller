@@ -1,10 +1,10 @@
 """ Handlers for object moved events
 """
 from zope.event import notify
-from Acquisition import aq_inner, aq_parent
-from eea.rdfmarshaller.actions.events import ObjectMovedOrRenamedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent, \
                                             IObjectRemovedEvent
+from Acquisition import aq_inner, aq_parent
+from eea.rdfmarshaller.actions.events import ObjectMovedOrRenamedEvent
 from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 from plone.app.contentrules.handlers import is_portal_factory, execute
 from plone.app.discussion.interfaces import IComment
