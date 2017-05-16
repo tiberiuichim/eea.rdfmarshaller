@@ -11,7 +11,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import IGenericObject2Surf, IObject2Surf
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
-from eea.rdfmarshaller.interfaces import ISurfSession   #, IReferenceField
+from eea.rdfmarshaller.interfaces import ISurfSession
 
 DEBUG = False
 
@@ -31,7 +31,7 @@ class RDFMarshaller(Marshaller):
 
     def demarshall(self, instance, data, **kwargs):
         """ de-marshall """
-        pass    #Should raise NotImplementedError
+        pass    # Should raise NotImplementedError
 
     @property
     def store(self):
@@ -45,30 +45,14 @@ class RDFMarshaller(Marshaller):
         store.log.setLevel(logging.CRITICAL)
         store.writer.log.setLevel(logging.CRITICAL)
 
-        store.reader.graph.bind('dc',
-                                surf.ns.DC,
-                                override=True)
-        store.reader.graph.bind('dcterms',
-                                surf.ns.DCTERMS,
-                                override=True)
-        store.reader.graph.bind('eea',
-                                surf.ns.EEA,
-                                override=True)
-        store.reader.graph.bind('geo',
-                                surf.ns.GEO,
-                                override=True)
-        store.reader.graph.bind('owl',
-                                 surf.ns.OWL,
-                                 override=True)
-        store.reader.graph.bind('dcat',
-                                surf.ns.DCAT,
-                                override=True)
-        store.reader.graph.bind('schema',
-                                surf.ns.SCHEMA,
-                                override=True)
-        store.reader.graph.bind('foaf',
-                                surf.ns.FOAF,
-                                override=True)
+        store.reader.graph.bind('dc', surf.ns.DC, override=True)
+        store.reader.graph.bind('dcterms', surf.ns.DCTERMS, override=True)
+        store.reader.graph.bind('eea', surf.ns.EEA, override=True)
+        store.reader.graph.bind('geo', surf.ns.GEO, override=True)
+        store.reader.graph.bind('owl', surf.ns.OWL, override=True)
+        store.reader.graph.bind('dcat', surf.ns.DCAT, override=True)
+        store.reader.graph.bind('schema', surf.ns.SCHEMA, override=True)
+        store.reader.graph.bind('foaf', surf.ns.FOAF, override=True)
 
         self._store = store
         return store
@@ -78,14 +62,14 @@ class RDFMarshaller(Marshaller):
 
         session = surf.Session(self.store)
         content_type = 'text/xml; charset=UTF-8'
-        length = data = 0   #is this line required? should be len(data)
+        length = data = 0   # is this line required? should be len(data)
 
-        obj2surf = queryMultiAdapter((instance, session),
-                                      interface=IObject2Surf)
+        obj2surf = queryMultiAdapter(
+            (instance, session), interface=IObject2Surf
+        )
 
-        self.store.reader.graph.bind(obj2surf.prefix,
-                                obj2surf.namespace,
-                                override=False)
+        self.store.reader.graph.bind(
+            obj2surf.prefix, obj2surf.namespace, override=False)
         endLevel = kwargs.get('endLevel', 1)
         obj2surf.write(endLevel=endLevel)
 
@@ -102,8 +86,8 @@ class GenericObject2Surf(object):
     implements(IGenericObject2Surf)
     adapts(Interface, ISurfSession)
 
-    _resource = None    #stores the surf resource
-    _namespace = None   #stores the namespace for this resource
+    _resource = None    # stores the surf resource
+    _namespace = None   # stores the namespace for this resource
     _prefix = None
 
     def __init__(self, context, session):
@@ -129,7 +113,7 @@ class GenericObject2Surf(object):
             return self._namespace
 
         ttool = getToolByName(self.context, 'portal_types')
-        surf.ns.register(**{self.prefix : '%s#' %
+        surf.ns.register(**{self.prefix: '%s#' %
                             ttool[self.context.portal_type].absolute_url()})
         self._namespace = getattr(surf.ns, self.prefix.upper())
         return self._namespace
@@ -151,7 +135,7 @@ class GenericObject2Surf(object):
         if self._resource is not None:
             return self._resource
 
-        try:    #pull a new resource from the surf session
+        try:    # pull a new resource from the surf session
             resource = self.session.get_class(
                 self.namespace[self.portalType])(self.subject)
         except Exception:
@@ -176,7 +160,7 @@ class GenericObject2Surf(object):
 
         resource = self.resource
 
-        #we modify the resource and then allow subscriber plugins to modify it
+        # we modify the resource and then allow subscriber plugins to modify it
         resource = self.modify_resource(self.resource, *args, **kwds)
         for modifier in subscribers([self.context], ISurfResourceModifier):
             modifier.run(resource, *args, **kwds)
