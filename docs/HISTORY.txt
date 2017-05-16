@@ -3,6 +3,12 @@ Changelog
 
 9.6.dev0 - (unreleased)
 -----------------------
+* Change: changed how the Distribution is expressed in @@rdf. Now it is a part
+  of a file field representation, which are now exported instead of being
+  hidden.
+  [zoltan_andras #83153]
+* Changed: show how to make sparql queries from the playground script
+  [zoltan_andras #83153]
 
 9.5 - (2017-05-15)
 ------------------
