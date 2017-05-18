@@ -1,5 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:browser="http://namespaces.zope.org/browser">
 
     <adapter factory=".Dexterity2Surf"
@@ -24,7 +25,8 @@
         factory=".fields.DexterityField2RdfSchema"
         provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
 
-    <subscriber factory=".modifiers.CoverTilesModifier"
+    <subscriber zcml:condition="installed collective.cover" 
+        factory=".extras.CoverTilesModifier"
         provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
     <subscriber factory=".modifiers.IsPartOfModifier"

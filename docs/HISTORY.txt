@@ -3,6 +3,9 @@ Changelog
 
 9.6.dev0 - (unreleased)
 -----------------------
+* Change: Moved the collective.cover modifier to the extras.py file and added
+  zcml condition for it
+  [iulianpetchesi #84170]
 * Feature: Added IValue2Surf implementation for sets and fields to the dc_map
   [iulianpetchesi #84170]
 * Feature: Ported modifiers from archetypes to dexterity, added rdf support
