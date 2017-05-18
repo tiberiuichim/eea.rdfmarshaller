@@ -3,6 +3,8 @@ Changelog
 
 9.6.dev0 - (unreleased)
 -----------------------
+* Change: Fix dexterity test for eea.rdfmarshaller
+  [iulianpetchesi #84170]
 * Change: Moved the dexterity image/file modifiers and added zcml condition for
   plone.app.contenttypes
   [iulianpetchesi #84170]
