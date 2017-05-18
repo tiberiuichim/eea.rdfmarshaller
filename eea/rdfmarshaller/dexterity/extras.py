@@ -4,6 +4,8 @@ from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from zope.component import adapts
 from zope.interface import implements
+from plone.app.contenttypes.interfaces import IImage, IFile
+from eea.rdfmarshaller.dexterity.modifiers import BaseFileModifier
 
 
 class CoverTilesModifier(object):
@@ -37,3 +39,15 @@ class CoverTilesModifier(object):
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
         return resource
+
+
+class ImageModifier(BaseFileModifier):
+    adapts(IImage)
+
+    field = 'image'
+
+
+class FileModifier(BaseFileModifier):
+    adapts(IFile)
+
+    field = 'file'

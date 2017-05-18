@@ -44,10 +44,12 @@
     <subscriber factory=".modifiers.RelatedItemsModifier"
         provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
-    <subscriber factory=".modifiers.ImageModifier"
+    <subscriber zcml:condition="installed plone.app.contenttypes"
+        factory=".extras.ImageModifier"
         provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
-    <subscriber factory=".modifiers.FileModifier"
+    <subscriber zcml:condition="installed plone.app.contenttypes"
+        factory=".extras.FileModifier"
         provides="eea.rdfmarshaller.interfaces.ISurfResourceModifier" />
 
 </configure>

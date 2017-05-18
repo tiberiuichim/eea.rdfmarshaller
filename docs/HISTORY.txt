@@ -3,6 +3,9 @@ Changelog
 
 9.6.dev0 - (unreleased)
 -----------------------
+* Change: Moved the dexterity image/file modifiers and added zcml condition for
+  plone.app.contenttypes
+  [iulianpetchesi #84170]
 * Change: Moved the collective.cover modifier to the extras.py file and added
   zcml condition for it
   [iulianpetchesi #84170]

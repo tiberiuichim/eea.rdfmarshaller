@@ -4,7 +4,6 @@ from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
-from plone.app.contenttypes.interfaces import IImage, IFile
 from plone.dexterity.interfaces import IDexterityContent
 import rdflib
 from zope.component import adapts
@@ -62,6 +61,7 @@ class WorkflowStateModifier(object):
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
         return resource
+
 
 # Archetypes modifiers ported to dexterity
 class IsPartOfModifier(object):
@@ -200,15 +200,3 @@ class BaseFileModifier(object):
             return
 
         setattr(resource, "dcterms_format", [item.contentType])
-
-
-class ImageModifier(BaseFileModifier):
-    adapts(IImage)
-
-    field = 'image'
-
-
-class FileModifier(BaseFileModifier):
-    adapts(IFile)
-
-    field = 'file'
