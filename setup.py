@@ -43,7 +43,6 @@ setup(name=name,
           'surf.rdflib',
           'Products.ATVocabularyManager',
           'chardet',
-          'plone.app.async',
           'eventlet',
       ],
       extras_require={
