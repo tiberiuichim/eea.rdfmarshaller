@@ -1,5 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:five="http://namespaces.zope.org/five"
+           xmlns:zcml="http://namespaces.zope.org/zcml"
            xmlns:browser="http://namespaces.zope.org/browser">
 
   <include file="profiles.zcml" />
@@ -8,7 +9,7 @@
   <include package=".browser" />
   <include package=".upgrades" />
   <include package=".archetypes" />
-  <include package=".dexterity" />
+  <include zcml:condition="have plone.dexterity" package=".dexterity" />
   <include package=".actions" />
 
   <class class="surf.Session">
