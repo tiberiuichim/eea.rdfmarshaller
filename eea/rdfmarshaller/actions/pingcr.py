@@ -3,9 +3,10 @@
 import logging
 import urllib
 import lxml.etree
+from eventlet.green import urllib2
 from zope import schema
 from zope.interface import implements, Interface
-from zope.component import adapts, getUtility, ComponentLookupError
+from zope.component import adapts, queryUtility, ComponentLookupError
 from zope.formlib import form
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectRemovedEvent
@@ -13,16 +14,15 @@ from App.config import getConfiguration
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
+from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
+from eea.rdfmarshaller.async import IAsyncService
+from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
     hasLinguaPloneInstalled = True
 except ImportError:
     hasLinguaPloneInstalled = False
-
-from eventlet.green import urllib2
-from plone.app.async.interfaces import IAsyncService
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm
-from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
 
 try:
     from eea.versions.interfaces import IGetVersions, IVersionEnhanced
@@ -30,7 +30,6 @@ try:
 except ImportError:
     hasVersionsInstalled = False
 
-from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 
 logger = logging.getLogger("eea.rdfmarshaller")
 
@@ -76,12 +75,20 @@ class PingCRActionExecutor(object):
         def pingCRSDS(service_to_ping, obj_url, create):
             """ Ping the CR/SDS service
             """
+            if async_service is None:
+                logger.warn("Can't pingCRSDS, plone.app.async not installed!")
+                return
+
             options = {}
             options['service_to_ping'] = service_to_ping
             options['obj_url'] = self.sanitize_url(obj_url)
             options['create'] = create
+            queue = async_service.getQueues()['']
             try:
-                async_service.queueJob(ping_CRSDS, self.context, options)
+                async_service.queueJobInQueue(
+                    queue, ('rdf',),
+                    ping_CRSDS, self.context, options
+                )
             except ComponentLookupError:
                 logger.info(noasync_msg)
 
@@ -129,7 +136,7 @@ class PingCRActionExecutor(object):
         else:
             obj_versions = [obj]
 
-        async_service = getUtility(IAsyncService)
+        async_service = queryUtility(IAsyncService)
 
         # If object has translations
         if hasLinguaPloneInstalled and ITranslatable.providedBy(obj):

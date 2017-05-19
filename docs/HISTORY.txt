@@ -3,6 +3,10 @@ Changelog
 
 9.6.dev0 - (unreleased)
 -----------------------
+* Change: Add dedicated async quota for RDF jobs (e.g.: ping_CRSDS)
+  [avoinea refs #84915]
+* Change: Remove hard-dependency on plone.app.async
+  [avoinea refs #84915]
 * Change: Fix dexterity test for eea.rdfmarshaller
   [iulianpetchesi #84170]
 * Change: Moved the dexterity image/file modifiers and added zcml condition for
