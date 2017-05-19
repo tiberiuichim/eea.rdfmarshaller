@@ -16,18 +16,33 @@ PloneTestCase.installProduct('ATVocabularyManager')
 PRODUCTS = ['ATVocabularyManager']
 PROFILES = ['eea.rdfmarshaller:default']
 
+HAS_DEXTERITY = True
+try:
+    import plone.dexterity
+except ImportError:
+    HAS_DEXTERITY = False
+
+
 @onsetup
 def setup_rdfmarshaller():
     """ Setup """
+
     fiveconfigure.debug_mode = True
     load_config('configure.zcml', eea.rdfmarshaller)
     load_config('testing.zcml', eea.rdfmarshaller)
+
+    if HAS_DEXTERITY:
+        from eea.rdfmarshaller import dexterity
+        load_config('configure.zcml', dexterity)
+
     fiveconfigure.debug_mode = False
 
+
 setup_rdfmarshaller()
-PloneTestCase.setupPloneSite(products=PRODUCTS,
+PloneTestCase.setupPloneSite(
+        products=PRODUCTS,
         extension_profiles=['eea.rdfmarshaller:testfixture'])
-#PloneTestCase.setupPloneSite(extension_profiles=('eea.rdfmarshaller:default',))
+
 
 class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
     """ Functional Test Case """
@@ -35,7 +50,6 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
     def afterSetUp(self):
         """ After setup """
         self.setRoles(['Manager'])
-
 
     def enableDebugLog(self):
         """ Enable context.plone_log() output from Python scripts """
@@ -59,11 +73,11 @@ class FunctionalTestCase(PloneTestCase.FunctionalTestCase):
              ),
             }
 
-        #wftool = portal.portal_workflow
+        # wftool = portal.portal_workflow
         for vkey in vocabs:
             atvm.invokeFactory('SimpleVocabulary', vkey)
             simple = atvm.getVocabularyByName(vkey)
             for (key, val) in vocabs[vkey]:
                 simple.addTerm(key, val)
-                #term = simple[key]
-                #wftool.doActionFor(term, 'publish')
+                # term = simple[key]
+                # wftool.doActionFor(term, 'publish')

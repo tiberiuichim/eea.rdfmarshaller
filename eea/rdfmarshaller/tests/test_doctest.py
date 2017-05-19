@@ -16,15 +16,17 @@ def test_suite():
     """
 
     return unittest.TestSuite((
-            FunctionalDocFileSuite('marshall.txt',
-                  optionflags=OPTIONFLAGS,
-                  package='eea.rdfmarshaller',
-                  test_class=FunctionalTestCase),
-            FunctionalDocFileSuite('schema.txt',
-                  optionflags=OPTIONFLAGS,
-                  package='eea.rdfmarshaller',
-                  test_class=FunctionalTestCase),
-            ))
+        FunctionalDocFileSuite(
+            'marshall.txt',
+            optionflags=OPTIONFLAGS,
+            package='eea.rdfmarshaller',
+            test_class=FunctionalTestCase),
+        FunctionalDocFileSuite(
+            'schema.txt',
+            optionflags=OPTIONFLAGS,
+            package='eea.rdfmarshaller',
+            test_class=FunctionalTestCase),
+        ))
 
 
 if __name__ == '__main__':

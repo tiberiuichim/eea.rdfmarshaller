@@ -16,11 +16,15 @@
     <adapter factory=".fields.DXField2Surf" />
     <adapter factory=".fields.RichValue2Surf" />
 
-    <adapter factory=".fields.DXRelationList2Surf" />
-    <adapter zcml:condition="have z3c.relationfield" factory=".fields.RelationValue2Surf" />
+    <configure zcml:condition="have z3c.relationfield">
+      <adapter factory=".fields.DXRelationList2Surf" />
+      <adapter factory=".fields.RelationValue2Surf" />
+    </configure>
+
     <adapter factory=".fields.Set2Surf" />
 
     <adapter factory=".DexterityFTI2Surf" />
+
     <adapter
         factory=".fields.DexterityField2RdfSchema"
         provides="eea.rdfmarshaller.interfaces.IFieldDefinition2Surf" />
