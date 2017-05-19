@@ -1,6 +1,8 @@
 """ rdfmarshaller adapters for dexterity content
 """
 
+import sys
+import surf
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
@@ -19,11 +21,10 @@ from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.schema import getFieldsInOrder
-import surf
-import sys
 
 
 def non_fieldset_fields(schema):
+    """ return fields not in fieldset """
     fieldset_fields = []
     fieldsets = schema.queryTaggedValue(FIELDSETS_KEY, [])
 
@@ -35,6 +36,7 @@ def non_fieldset_fields(schema):
 
 
 def get_ordered_fields(fti):
+    """ return fields in fieldset order """
     # NOTE: code extracted from collective.excelexport. Original comments
     # preserved
 
@@ -116,8 +118,7 @@ class Dexterity2Surf(GenericObject2Surf):
                 props.getProperty('%s_blacklist' % self.portalType.lower(),
                                   props.getProperty('blacklist'))
             )
-        else:
-            return self._blacklist
+        return self._blacklist
 
     @property
     def portalType(self):
@@ -264,7 +265,7 @@ class DexterityFTI2Surf(GenericObject2Surf):
             field2surf = queryMultiAdapter(
                 (field, context, session), interface=IFieldDefinition2Surf)
             if field2surf is None:
-                # TODO: log a warning
+                # NOTE: log a warning
                 continue
             field2surf.write()
 

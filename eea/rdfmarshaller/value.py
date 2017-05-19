@@ -1,10 +1,12 @@
+""" Surf conversion classes """
+import re
+
 from DateTime.DateTime import DateTime
 from Products.CMFPlone import log
 from chardet import detect
 from eea.rdfmarshaller.interfaces import IValue2Surf
 from zope.component import adapts
 from zope.interface import implements, Interface
-import re
 
 
 class Value2Surf(object):

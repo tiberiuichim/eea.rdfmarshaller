@@ -1,3 +1,4 @@
+""" rdfmarshaller interfaces """
 from zope.interface import Interface, Attribute
 
 

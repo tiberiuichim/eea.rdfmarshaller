@@ -1,10 +1,13 @@
-from collective.cover.interfaces import ICover
+""" extras """
 import sys
+
+from collective.cover.interfaces import ICover
 from Products.CMFPlone import log
-from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from zope.component import adapts
 from zope.interface import implements
 from plone.app.contenttypes.interfaces import IImage, IFile
+
+from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from eea.rdfmarshaller.dexterity.modifiers import BaseFileModifier
 
 
@@ -42,12 +45,14 @@ class CoverTilesModifier(object):
 
 
 class ImageModifier(BaseFileModifier):
+    """ ImageModifier """
     adapts(IImage)
 
     field = 'image'
 
 
 class FileModifier(BaseFileModifier):
+    """ FileModifier """
     adapts(IFile)
 
     field = 'file'

@@ -1,16 +1,20 @@
+""" Test dexterity """
+import unittest
+
+import lxml.etree
 from eea.rdfmarshaller.testing import INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from zope.component import getMultiAdapter
-import unittest
-import lxml.etree
 
 
 class TestProgramIntegration(unittest.TestCase):
+    """ Integration testing """
 
     layer = INTEGRATION_TESTING
 
     def setUp(self):
+        """ Setup """
         self.portal = self.layer['portal']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
         self.portal.invokeFactory('testpage', 'test-page')
@@ -19,6 +23,7 @@ class TestProgramIntegration(unittest.TestCase):
         self.page.edit(title="Test title", description="Test description")
 
     def test_rdf_view(self):
+        """ test rdf view """
         req = self.portal.REQUEST
         rdf = getMultiAdapter((self.page, req), name="rdf")()
 
@@ -28,6 +33,7 @@ class TestProgramIntegration(unittest.TestCase):
         assert "<dcterms:title>Test title</dcterms:title>" in rdf
 
     def test_rdfs_view(self):
+        """ test rdfs view """
         ptypes = self.portal['portal_types']
         testpage_fti = ptypes['testpage']
         req = self.portal.REQUEST
@@ -47,4 +53,5 @@ class TestProgramIntegration(unittest.TestCase):
 
 
 def test_suite():
+    """ test suite """
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

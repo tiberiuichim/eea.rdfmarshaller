@@ -1,5 +1,8 @@
 """ Archetypes
 """
+import sys
+import rdflib
+import surf
 
 from OFS.interfaces import IFolder
 from Products.Archetypes.interfaces import IBaseObject
@@ -21,9 +24,6 @@ from zope.component import getMultiAdapter
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface
-import rdflib
-import surf
-import sys
 
 
 class Archetype2Surf(GenericObject2Surf):
@@ -59,8 +59,7 @@ class Archetype2Surf(GenericObject2Surf):
             return list(props.getProperty('%s_blacklist'
                                           % self.portalType.lower(),
                                           props.getProperty('blacklist')))
-        else:
-            return self._blacklist
+        return self._blacklist
 
     @property
     def portalType(self):

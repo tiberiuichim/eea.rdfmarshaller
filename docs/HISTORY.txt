@@ -28,6 +28,8 @@ Changelog
   [zoltan_andras #83153]
 * Changed: show how to make sparql queries from the playground script
   [zoltan_andras #83153]
+* Change: fixed PyLint warnings and errors
+  [valipod refs #84949]
 
 9.5 - (2017-05-15)
 ------------------

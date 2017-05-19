@@ -13,24 +13,24 @@ from App.config import getConfiguration
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
-from eventlet.green import urllib2
-from plone.app.async.interfaces import IAsyncService
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm
-from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-
-from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
-
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
     hasLinguaPloneInstalled = True
 except ImportError:
     hasLinguaPloneInstalled = False
 
+from eventlet.green import urllib2
+from plone.app.async.interfaces import IAsyncService
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
+from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
+
 try:
     from eea.versions.interfaces import IGetVersions, IVersionEnhanced
     hasVersionsInstalled = True
 except ImportError:
     hasVersionsInstalled = False
+
+from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 
 logger = logging.getLogger("eea.rdfmarshaller")
 
@@ -81,7 +81,7 @@ class PingCRActionExecutor(object):
             options['obj_url'] = self.sanitize_url(obj_url)
             options['create'] = create
             try:
-                async.queueJob(ping_CRSDS, self.context, options)
+                async_service.queueJob(ping_CRSDS, self.context, options)
             except ComponentLookupError:
                 logger.info(noasync_msg)
 
@@ -129,7 +129,7 @@ class PingCRActionExecutor(object):
         else:
             obj_versions = [obj]
 
-        async = getUtility(IAsyncService)
+        async_service = getUtility(IAsyncService)
 
         # If object has translations
         if hasLinguaPloneInstalled and ITranslatable.providedBy(obj):

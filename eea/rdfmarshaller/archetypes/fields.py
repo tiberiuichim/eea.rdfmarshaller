@@ -1,5 +1,8 @@
 """ Archetypes Field2Surf field adapters
 """
+import sys
+import surf
+import rdflib
 
 from Products.Archetypes.interfaces import IField, IFileField
 from Products.CMFPlone import log
@@ -8,9 +11,6 @@ from eea.rdfmarshaller.archetypes.interfaces import IReferenceField
 from eea.rdfmarshaller.interfaces import ISurfSession
 from zope.component import adapts
 from zope.interface import implements, Interface
-import rdflib
-import surf
-import sys
 
 
 class ATField2Surf(object):
@@ -52,26 +52,38 @@ class ATFileField2Surf(ATField2Surf):
 
     @property
     def name(self):
+        """ return field name """
         return self.field.getName()
 
     def value(self):
         """ The desired output is similar to:
         <report:file>
-          <schema:MediaObject rdf:about="http://random-url/publications/emep-eea-guidebook-2016/file">
-            <eea:fileInfo rdf:resource="http://random-url/publications/emep-eea-guidebook-2016/file#fileInfo"/>
+          <schema:MediaObject rdf:about="
+                http://random-url/publications/emep-eea-guidebook-2016/file">
+            <eea:fileInfo rdf:resource="
+                http://random-url/publications/emep-eea-guidebook-2016/
+                file#fileInfo"/>
           </schema:MediaObject>
         </report:file>
 
         For files:
-        <dcat:Distribution rdf:about="http://random-url/publications/emep-eea-guidebook-2016/file#fileInfo">
-          <dcat:downloadURL rdf:resource="http://random-url/publications/emep-eea-guidebook-2016/at_download/file"/>
-          <dcat:sizeInBytes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">844</dcat:sizeInBytes>
+        <dcat:Distribution rdf:about="
+            http://random-url/publications/emep-eea-guidebook-2016/
+            file#fileInfo">
+          <dcat:downloadURL rdf:resource="
+            http://random-url/publications/emep-eea-guidebook-2016/
+            at_download/file"/>
+          <dcat:sizeInBytes rdf:datatype="
+            http://www.w3.org/2001/XMLSchema#integer">844</dcat:sizeInBytes>
         </dcat:Distribution>
 
         For images:
-        <dcat:Distribution rdf:about="http://random-url/articles/alpler/image#fileInfo">
-          <dcat:downloadURL rdf:resource="http://random-url/articles/alpler/at_download/image"/>
-          <dcat:sizeInBytes rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">844</dcat:sizeInBytes>
+        <dcat:Distribution rdf:about="
+            http://random-url/articles/alpler/image#fileInfo">
+          <dcat:downloadURL rdf:resource="
+            http://random-url/articles/alpler/at_download/image"/>
+          <dcat:sizeInBytes rdf:datatype="
+            http://www.w3.org/2001/XMLSchema#integer">844</dcat:sizeInBytes>
         </dcat:Distribution>
         """
 

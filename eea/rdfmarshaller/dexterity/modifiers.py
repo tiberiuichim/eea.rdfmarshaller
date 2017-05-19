@@ -1,19 +1,21 @@
+""" Modifiers """
 import re
 import sys
+import rdflib
 from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
-from eea.rdfmarshaller.interfaces import ISurfResourceModifier
-from plone.dexterity.interfaces import IDexterityContent
-import rdflib
 from zope.component import adapts
 from zope.interface import implements, providedBy
+from plone.dexterity.interfaces import IDexterityContent
 
-has_plone_multilingual = True
 try:
     from plone.app.multilingual.interfaces import ITranslationManager
+    has_plone_multilingual = True
 except ImportError:
     has_plone_multilingual = False
+
+from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 
 ILLEGAL_XML_CHARS_PATTERN = re.compile(
     u'[\x00-\x08\x0b\x0c\x0e-\x1F\uD800-\uDFFF\uFFFE\uFFFF]'
@@ -34,7 +36,7 @@ class WorkflowStateModifier(object):
         """Change the rdf resource
         """
         plone_portal_state = self.context.restrictedTraverse(
-                '@@plone_portal_state')
+            '@@plone_portal_state')
         portal_url = plone_portal_state.portal_url()
 
         workflowTool = getToolByName(self.context, "portal_workflow")
@@ -111,7 +113,7 @@ class TranslationInfoModifier(object):
             translations = ITranslationManager(
                 context).get_translated_languages()
 
-            if len(translations > 0):
+            if translations:
                 translations_objs = [ITranslationManager.get_translation(o)
                                      for o in translations]
                 resource.eea_hasTranslation = \
@@ -156,8 +158,8 @@ class SearchableTextInModifier(object):
     def run(self, resource, *args, **kwds):
         """Change the rdf resource
         """
-        resource.dcterms_abstract = ILLEGAL_XML_CHARS_PATTERN.sub('',
-                self.context.SearchableText())
+        resource.dcterms_abstract = ILLEGAL_XML_CHARS_PATTERN.sub(
+            '', self.context.SearchableText())
 
 
 class RelatedItemsModifier(object):
@@ -176,8 +178,9 @@ class RelatedItemsModifier(object):
         if not getattr(self.context, 'relatedItems', None):
             return
 
-        resource.dcterms_references = [rdflib.URIRef(o.to_object.absolute_url())
-                                       for o in self.context.relatedItems]
+        resource.dcterms_references = [
+            rdflib.URIRef(o.to_object.absolute_url())
+            for o in self.context.relatedItems]
 
 
 # This one comes from eea.dataservices

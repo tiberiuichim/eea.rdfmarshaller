@@ -1,3 +1,8 @@
+""" fields module """
+
+import sys
+import rdflib
+import surf
 from Acquisition import aq_base
 from Products.CMFPlone import log
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
@@ -11,9 +16,6 @@ from z3c.relationfield.interfaces import IRelationValue
 from zope.component import adapts
 from zope.interface import implements, Interface
 from zope.schema.interfaces import IField
-import rdflib
-import surf
-import sys
 
 
 class DXField2Surf(object):
@@ -52,10 +54,11 @@ class DXField2Surf(object):
 
 
 class RichValue2Surf(Value2Surf):
+    """ RichTextValue adaptor """
     adapts(RichTextValue)
 
     def __init__(self, value):
-        self.value = value.output
+        super(RichValue2Surf, self).__init__(value.output)
 
 
 class DexterityField2RdfSchema(GenericObject2Surf):
@@ -94,7 +97,7 @@ class DexterityField2RdfSchema(GenericObject2Surf):
         """ Schema to Surf """
         context = self.context
 
-        # TODO: use dexterity mechanism to get widget
+        # NOTE: To Do: use dexterity mechanism to get widget
         widget_label = (context.title, u'en')
         widget_description = (context.description, u'en')
         fti_title = rdflib.URIRef(u'#%s' % self.fti.Title())

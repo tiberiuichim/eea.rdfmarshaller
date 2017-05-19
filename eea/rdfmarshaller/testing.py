@@ -1,3 +1,4 @@
+""" testing  """
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
@@ -5,10 +6,12 @@ from plone.app.testing import FunctionalTesting
 
 
 class Fixture(PloneSandboxLayer):
+    """ Fixture """
 
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):
+        """ Set up Zope """
         # Load ZCML
         import eea.rdfmarshaller
         import plone.dexterity
@@ -27,6 +30,7 @@ class Fixture(PloneSandboxLayer):
         self.loadZCML(package=eea.rdfmarshaller, name='testing.zcml')
 
     def setUpPloneSite(self, portal):
+        """ Set up Plone site """
         # Install the example.conference product
         self.applyProfile(portal, 'eea.rdfmarshaller:default')
         self.applyProfile(portal, 'eea.rdfmarshaller:dexterity_testfixture')
@@ -36,8 +40,8 @@ FIXTURE = Fixture()
 INTEGRATION_TESTING = IntegrationTesting(
     bases=(FIXTURE,),
     name='eea.rdfmarshaller:Integration',
-    )
+)
 FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(FIXTURE,),
     name='eea.rdfmarshaller:Functional',
-    )
+)

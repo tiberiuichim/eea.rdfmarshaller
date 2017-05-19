@@ -1,8 +1,9 @@
 """ Export module """
 
+import os
+
 from Products.Marshall.registry import getComponent
 from unidecode import unidecode
-import os
 
 try:
     LIMIT = int(os.environ.get("RDF_UNICODE_LIMIT", 65535))
