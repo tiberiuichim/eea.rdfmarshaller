@@ -1,12 +1,13 @@
 """ Surf conversion classes """
-import re
 
 from DateTime.DateTime import DateTime
 from Products.CMFPlone import log
 from chardet import detect
 from eea.rdfmarshaller.interfaces import IValue2Surf
+from rdflib import URIRef
 from zope.component import adapts
 from zope.interface import implements, Interface
+import re
 
 
 class Value2Surf(object):
@@ -23,11 +24,19 @@ class Value2Surf(object):
         if isinstance(self.value, unicode):
             return (self.value, language)
         try:
-            value = (unicode(self.value, 'utf-8', 'replace'),
-                     language)
+            value = (unicode(self.value, 'utf-8', 'replace'), language)
         except TypeError:
             value = str(self.value)
         return value
+
+
+class URIRef2Surf(Value2Surf):
+    """ Value2Surf implementation for URIRef
+    """
+    adapts(URIRef)
+
+    def __call__(self, *args, **kwargs):
+        return self.value
 
 
 class Tuple2Surf(Value2Surf):

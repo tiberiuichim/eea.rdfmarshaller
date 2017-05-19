@@ -19,6 +19,7 @@
   <adapter factory=".marshaller.PortalTypesUtil2Surf" />
 
   <adapter factory=".value.Value2Surf" />
+  <adapter factory=".value.URIRef2Surf" />
   <adapter factory=".value.Tuple2Surf" />
   <adapter factory=".value.List2Surf" />
   <adapter factory=".value.String2Surf" />

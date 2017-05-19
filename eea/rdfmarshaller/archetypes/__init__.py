@@ -109,6 +109,7 @@ class Archetype2Surf(GenericObject2Surf):
 
         for field in self.context.Schema().fields():
             fieldName = field.getName()
+
             if fieldName in self.blacklist_map:
                 continue
 
