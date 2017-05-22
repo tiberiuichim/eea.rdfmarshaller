@@ -34,6 +34,9 @@ Changelog
   [zoltan_andras #83153]
 * Change: fixed PyLint warnings and errors
   [valipod refs #84949]
+* Upgrade step: the "image" and "file" fields should be removed from
+  the site_properties/rdf_marshaller blacklist
+  [alecghica refs #83153]
 
 9.5 - (2017-05-15)
 ------------------
