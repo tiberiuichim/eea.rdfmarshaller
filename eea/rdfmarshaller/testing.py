@@ -4,6 +4,12 @@ from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import FunctionalTesting
 
+HAS_DEXTERITY = True
+try:
+    import plone.dexterity as HAS_DEXTERITY
+except ImportError:
+    HAS_DEXTERITY = False
+
 
 class Fixture(PloneSandboxLayer):
     """ Fixture """
@@ -27,13 +33,21 @@ class Fixture(PloneSandboxLayer):
         self.loadZCML(package=plone.app.textfield)
 
         self.loadZCML(package=eea.rdfmarshaller)
+
+        if HAS_DEXTERITY:
+            from eea.rdfmarshaller import dexterity
+            self.loadZCML(package=dexterity)
+
         self.loadZCML(package=eea.rdfmarshaller, name='testing.zcml')
 
     def setUpPloneSite(self, portal):
         """ Set up Plone site """
         # Install the example.conference product
         self.applyProfile(portal, 'eea.rdfmarshaller:default')
-        self.applyProfile(portal, 'eea.rdfmarshaller:dexterity_testfixture')
+        if HAS_DEXTERITY:
+            self.applyProfile(
+                    portal,
+                    'eea.rdfmarshaller:dexterity_testfixture')
 
 
 FIXTURE = Fixture()

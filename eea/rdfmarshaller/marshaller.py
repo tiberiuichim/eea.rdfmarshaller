@@ -64,6 +64,7 @@ class RDFMarshaller(Marshaller):
         content_type = 'text/xml; charset=UTF-8'
         length = data = 0   # is this line required? should be len(data)
 
+        # import pdb; pdb.set_trace()
         obj2surf = queryMultiAdapter(
             (instance, session), interface=IObject2Surf
         )

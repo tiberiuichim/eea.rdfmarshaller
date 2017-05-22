@@ -133,7 +133,6 @@ if HAS_Z3C_RELATIONFIELD:
             return [rdflib.URIRef(ref.to_object.absolute_url())
                     for ref in value]
 
-
     class RelationValue2Surf(Value2Surf):
         """IValue2Surf implementation for DateTime """
 
@@ -144,12 +143,3 @@ if HAS_Z3C_RELATIONFIELD:
             value = self.value
             obj = value.to_object
             return rdflib.URIRef(obj.absolute_url())
-
-
-class Set2Surf(Value2Surf):
-    """IValue2Surf implementation for sets.
-    """
-    adapts(set)
-
-    def __call__(self, *args, **kwds):
-        return list(self.value)

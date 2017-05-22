@@ -1,8 +1,5 @@
 """ Base module """
-import logging
-import sys
 
-import eea.rdfmarshaller
 from Products.ATVocabularyManager.config import TOOL_NAME as VOCABTOOL
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.log import logger
@@ -10,17 +7,14 @@ from Products.Five import fiveconfigure
 from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.layer import onsetup
 from Zope2.App.zcml import load_config
+import eea.rdfmarshaller
+import logging
+import sys
 
 PloneTestCase.installProduct('ATVocabularyManager')
 
 PRODUCTS = ['ATVocabularyManager']
 PROFILES = ['eea.rdfmarshaller:default']
-
-HAS_DEXTERITY = True
-try:
-    import plone.dexterity
-except ImportError:
-    HAS_DEXTERITY = False
 
 
 @onsetup
@@ -30,10 +24,6 @@ def setup_rdfmarshaller():
     fiveconfigure.debug_mode = True
     load_config('configure.zcml', eea.rdfmarshaller)
     load_config('testing.zcml', eea.rdfmarshaller)
-
-    if HAS_DEXTERITY:
-        from eea.rdfmarshaller import dexterity
-        load_config('configure.zcml', dexterity)
 
     fiveconfigure.debug_mode = False
 

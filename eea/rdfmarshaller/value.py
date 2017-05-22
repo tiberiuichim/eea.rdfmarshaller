@@ -57,6 +57,15 @@ class List2Surf(Value2Surf):
         return self.value
 
 
+class Set2Surf(Value2Surf):
+    """IValue2Surf implementation for sets.
+    """
+    adapts(set)
+
+    def __call__(self, *args, **kwds):
+        return list(self.value)
+
+
 class String2Surf(Value2Surf):
     """IValue2Surf implementation for strings
     """

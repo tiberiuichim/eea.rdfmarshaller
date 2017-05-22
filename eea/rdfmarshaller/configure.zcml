@@ -6,12 +6,13 @@
   <include file="profiles.zcml" />
   <include file="patches.zcml" />
 
+  <include package=".actions" />
+  <include package=".archetypes" />
   <include package=".async" />
   <include package=".browser" />
   <include package=".upgrades" />
-  <include package=".archetypes" />
+
   <include zcml:condition="have plone.dexterity" package=".dexterity" />
-  <include package=".actions" />
 
   <class class="surf.Session">
      <implements interface=".interfaces.ISurfSession" />
@@ -19,11 +20,12 @@
 
   <adapter factory=".marshaller.PortalTypesUtil2Surf" />
 
-  <adapter factory=".value.Value2Surf" />
-  <adapter factory=".value.URIRef2Surf" />
-  <adapter factory=".value.Tuple2Surf" />
-  <adapter factory=".value.List2Surf" />
-  <adapter factory=".value.String2Surf" />
   <adapter factory=".value.DateTime2Surf" />
+  <adapter factory=".value.List2Surf" />
+  <adapter factory=".value.Set2Surf" />
+  <adapter factory=".value.String2Surf" />
+  <adapter factory=".value.Tuple2Surf" />
+  <adapter factory=".value.URIRef2Surf" />
+  <adapter factory=".value.Value2Surf" />
 
 </configure>
