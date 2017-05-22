@@ -1,37 +1,37 @@
 Changelog
 =========
 
-9.6.dev0 - (unreleased)
------------------------
+9.6 - (2017-05-22)
+------------------
 * Change: Add dedicated async quota for RDF jobs (e.g.: ping_CRSDS)
   [avoinea refs #84915]
 * Change: Remove hard-dependency on plone.app.async
   [avoinea refs #84915]
 * Change: Fix dexterity test for eea.rdfmarshaller
-  [iulianpetchesi #84170]
+  [iulianpetchesi refs #84170]
 * Change: Moved the dexterity image/file modifiers and added zcml condition for
   plone.app.contenttypes
-  [iulianpetchesi #84170]
+  [iulianpetchesi refs #84170]
 * Change: Moved the collective.cover modifier to the extras.py file and added
   zcml condition for it
-  [iulianpetchesi #84170]
+  [iulianpetchesi refs #84170]
 * Feature: Added IValue2Surf implementation for sets and fields to the dc_map
-  [iulianpetchesi #84170]
+  [iulianpetchesi refs #84170]
 * Feature: Ported modifiers from archetypes to dexterity, added rdf support
   for files and images and excluded some dc fields from the rdf schema
-  [iulianpetchesi #82861]
+  [iulianpetchesi refs #82861]
 * Feature: added compatiblity with collective.cover
-  [iulianpetchesi #79312]
+  [iulianpetchesi refs #79312]
 * Feature: added compatiblity with plone.dexterity content types
 * Change: refactored Archetypes support, to extract bits reused in
   Dexterity compatibility implementation
-  [tiberich #79312]
+  [tiberich refs #79312]
 * Change: changed how the Distribution is expressed in @@rdf. Now it is a part
   of a file field representation, which are now exported instead of being
   hidden.
-  [zoltan_andras #83153]
+  [zoltan_andras refs #83153]
 * Changed: show how to make sparql queries from the playground script
-  [zoltan_andras #83153]
+  [zoltan_andras refs #83153]
 * Change: fixed PyLint warnings and errors
   [valipod refs #84949]
 * Upgrade step: the "image" and "file" fields should be removed from
