@@ -12,7 +12,7 @@
   <include package=".browser" />
   <include package=".upgrades" />
 
-  <include zcml:condition="have plone.dexterity" package=".dexterity" />
+  <include zcml:condition="installed plone.dexterity" package=".dexterity" />
 
   <class class="surf.Session">
      <implements interface=".interfaces.ISurfSession" />

@@ -26,7 +26,7 @@
   <adapter factory=".fields.DXField2Surf" />
   <adapter factory=".fields.RichValue2Surf" />
 
-  <configure zcml:condition="have z3c.relationfield">
+  <configure zcml:condition="installed z3c.relationfield">
     <adapter factory=".fields.DXRelationList2Surf" />
     <adapter factory=".fields.RelationValue2Surf" />
   </configure>
