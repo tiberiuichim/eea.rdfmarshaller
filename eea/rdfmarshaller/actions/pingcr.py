@@ -14,16 +14,15 @@ from App.config import getConfiguration
 from OFS.SimpleItem import SimpleItem
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
-from plone.app.contentrules.browser.formhelper import AddForm, EditForm
-from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
-from eea.rdfmarshaller.async import IAsyncService
-from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
     hasLinguaPloneInstalled = True
 except ImportError:
     hasLinguaPloneInstalled = False
-
+from plone.app.contentrules.browser.formhelper import AddForm, EditForm
+from plone.contentrules.rule.interfaces import IExecutable, IRuleElementData
+from eea.rdfmarshaller.async import IAsyncService
+from eea.rdfmarshaller.actions.interfaces import IObjectMovedOrRenamedEvent
 try:
     from eea.versions.interfaces import IGetVersions, IVersionEnhanced
     hasVersionsInstalled = True
@@ -37,9 +36,11 @@ logger = logging.getLogger("eea.rdfmarshaller")
 class IPingCRAction(Interface):
     """ Ping action settings schema
     """
-    service_to_ping = schema.TextLine(title=u"Service to ping",
-                              description=u"Service to ping.",
-                              required=True)
+    service_to_ping = schema.TextLine(
+        title=u"Service to ping",
+        description=u"Service to ping.",
+        required=True
+    )
 
 
 class PingCRAction(SimpleItem):
@@ -110,13 +111,13 @@ class PingCRActionExecutor(object):
             for child in obj.objectIds():
                 child_obj = obj.get(child)
                 if not child_obj:
-                    logger.info("Couldn't retrieve child id %s for %s",
+                    logger.info(
+                        "Couldn't retrieve child id %s for %s",
                         child, obj.absolute_url())
                     continue
                 obj_url = "%s/@@rdf" % child_obj.absolute_url()
                 pingCRSDS(service_to_ping, obj_url, create)
                 pingCRSDS_children(service_to_ping, child_obj, create)
-
 
         # When no request the task is called from a async task, see #19830
         request = getattr(obj, 'REQUEST', None)
@@ -131,7 +132,7 @@ class PingCRActionExecutor(object):
             return
 
         if hasVersionsInstalled and IVersionEnhanced.providedBy(obj) \
-                                                              and request:
+                and request:
             obj_versions = IGetVersions(obj).versions()
         else:
             obj_versions = [obj]
@@ -163,7 +164,7 @@ class PingCRActionExecutor(object):
 
         # If object was moved/renamed first ping with the old object's URL
         if IObjectMovedOrRenamedEvent.providedBy(event):
-            obj_url = "%s/%s/@@rdf" % (event.oldParent.absolute_url(), \
+            obj_url = "%s/%s/@@rdf" % (event.oldParent.absolute_url(),
                                        event.oldName)
             pingCRSDS(service_to_ping, obj_url, False)
 
@@ -211,6 +212,7 @@ class PingCRActionExecutor(object):
 
         return url
 
+
 class PingCRAddForm(AddForm):
     """ Ping action addform
     """
@@ -247,6 +249,7 @@ class PingCRView(BrowserView):
         options['obj_url'] = url
         ping_CRSDS(context, options)
 
+
 def ping_CRSDS(context, options):
     """ Ping the CR/SDS service
     """
@@ -258,39 +261,44 @@ def ping_CRSDS(context, options):
                 params['create'] = options['create']
             encoded_params = urllib.urlencode(params)
             url = "%s?%s" % (options['service_to_ping'], encoded_params)
-            logger.info("Pinging %s for object %s with create=%s",
-                    options['service_to_ping'],
-                    options['obj_url'],
-                    options['create'])
+            logger.info(
+                "Pinging %s for object %s with create=%s",
+                options['service_to_ping'],
+                options['obj_url'],
+                options['create'])
             ping_con = urllib2.urlopen(url, timeout=10)
             ping_response = ping_con.read()
             ping_con.close()
             response = lxml.etree.fromstring(ping_response)
             try:
                 message = response.find("message").text
-                logger.info("Response for pinging %s for object %s: %s",
-                        options['service_to_ping'],
-                        options['obj_url'],
-                        message)
+                logger.info(
+                    "Response for pinging %s for object %s: %s",
+                    options['service_to_ping'],
+                    options['obj_url'],
+                    message)
             except AttributeError:
                 message = 'no message'
-                logger.info("Pinging %s for object %s failed without message",
-                        options['service_to_ping'],
-                        options['obj_url'])
+                logger.info(
+                    "Pinging %s for object %s failed without message",
+                    options['service_to_ping'],
+                    options['obj_url'])
             if (not options['create']) and \
                'URL not in catalogue of sources' in message:
                 logger.info("Retry ping with create=true")
                 options['create'] = True
                 continue
         except urllib2.HTTPError, err:
-            logger.info("Pinging %s for object %s failed with message: %s",
-                    options['service_to_ping'],
-                    options['obj_url'],
-                    err.msg)
+            logger.info(
+                "Pinging %s for object %s failed with message: %s",
+                options['service_to_ping'],
+                options['obj_url'],
+                err.msg)
         except urllib2.URLError, err:
-            logger.info("Pinging %s for object %s failed with message: %s",
-                    options['service_to_ping'],
-                    options['obj_url'],
-                    err.reason)
+            logger.info(
+                "Pinging %s for object %s failed with message: %s",
+                options['service_to_ping'],
+                options['obj_url'],
+                err.reason)
 
         break

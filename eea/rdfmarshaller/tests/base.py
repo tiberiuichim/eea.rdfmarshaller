@@ -1,5 +1,7 @@
 """ Base module """
 
+import logging
+import sys
 from Products.ATVocabularyManager.config import TOOL_NAME as VOCABTOOL
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.log import logger
@@ -8,8 +10,6 @@ from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.layer import onsetup
 from Zope2.App.zcml import load_config
 import eea.rdfmarshaller
-import logging
-import sys
 
 PloneTestCase.installProduct('ATVocabularyManager')
 

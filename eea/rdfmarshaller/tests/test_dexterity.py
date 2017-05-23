@@ -1,11 +1,11 @@
 """ Test dexterity """
 
+import unittest
 from eea.rdfmarshaller.testing import INTEGRATION_TESTING
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
 from zope.component import getMultiAdapter
 import lxml.etree
-import unittest
 
 
 class TestProgramIntegration(unittest.TestCase):

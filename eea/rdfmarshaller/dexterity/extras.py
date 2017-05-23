@@ -1,5 +1,6 @@
 """ extras """
 
+import sys
 from Products.CMFPlone import log
 from collective.cover.interfaces import ICover
 from eea.rdfmarshaller.dexterity.modifiers import BaseFileModifier
@@ -7,7 +8,6 @@ from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from plone.app.contenttypes.interfaces import IImage, IFile
 from zope.component import adapts
 from zope.interface import implements
-import sys
 
 
 class CoverTilesModifier(object):
