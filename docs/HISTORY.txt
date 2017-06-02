@@ -3,6 +3,8 @@ Changelog
 
 9.8.dev0 - (unreleased)
 -----------------------
+* Change: Save dexterity cover tiles content as unicode
+  [iulianpetchesi refs #85565]
 
 9.7 - (2017-05-23)
 ------------------

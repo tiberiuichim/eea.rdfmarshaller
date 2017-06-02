@@ -29,7 +29,11 @@ class CoverTilesModifier(object):
             tile = self.context.get_tile(uid)
             text = tile.data.get('text', None)
             if text:
-                value += text.output
+                # convert to unicode
+                if not isinstance(text.output, unicode):
+                    value += unicode(text.output, 'utf-8')
+                else:
+                    value += text.output
         if value:
             try:
                 setattr(resource, '%s_%s' % ("eea", "cover_tiles"),
