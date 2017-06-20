@@ -18,6 +18,7 @@ DEBUG = False
 logging.basicConfig(level=logging.CRITICAL)
 
 surf.ns.register(EEA="http://www.eea.europa.eu/ontologies.rdf#")
+surf.ns.register(SKOS="http://www.w3.org/2004/02/skos/core#")
 surf.ns.register(DCAT="http://www.w3.org/ns/dcat#")
 surf.ns.register(SCHEMA="http://schema.org/")
 

@@ -3,6 +3,8 @@ Changelog
 
 9.9.dev0 - (unreleased)
 -----------------------
+* Change: added skos namespace to eea.rdfmarshaller
+  [ichim-david refs #85617]
 
 9.8 - (2017-06-06)
 ------------------
