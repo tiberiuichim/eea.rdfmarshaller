@@ -49,6 +49,7 @@ class RDFMarshaller(Marshaller):
         store.reader.graph.bind('dc', surf.ns.DC, override=True)
         store.reader.graph.bind('dcterms', surf.ns.DCTERMS, override=True)
         store.reader.graph.bind('eea', surf.ns.EEA, override=True)
+        store.reader.graph.bind('skos', surf.ns.SKOS, override=True)
         store.reader.graph.bind('geo', surf.ns.GEO, override=True)
         store.reader.graph.bind('owl', surf.ns.OWL, override=True)
         store.reader.graph.bind('dcat', surf.ns.DCAT, override=True)
