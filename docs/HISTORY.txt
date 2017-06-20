@@ -5,6 +5,9 @@ Changelog
 -----------------------
 * Change: added skos namespace to eea.rdfmarshaller
   [ichim-david refs #85617]
+* Bug fix: fixed failing tests due to depiction changes
+  [zoltan_andras refs #81209]
+
 
 9.8 - (2017-06-06)
 ------------------

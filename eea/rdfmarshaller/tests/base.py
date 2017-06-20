@@ -10,10 +10,12 @@ from Products.PloneTestCase import PloneTestCase
 from Products.PloneTestCase.layer import onsetup
 from Zope2.App.zcml import load_config
 import eea.rdfmarshaller
+import eea.depiction
 
 PloneTestCase.installProduct('ATVocabularyManager')
+PloneTestCase.installProduct('eea.depiction')
 
-PRODUCTS = ['ATVocabularyManager']
+PRODUCTS = ['ATVocabularyManager', 'eea.depiction']
 PROFILES = ['eea.rdfmarshaller:default']
 
 
@@ -28,7 +30,16 @@ def setup_rdfmarshaller():
     fiveconfigure.debug_mode = False
 
 
+@onsetup
+def setup_depiction():
+    """ Setup """
+
+    load_config('configure.zcml', eea.depiction)
+    PloneTestCase.installPackage('eea.depiction')
+
+
 setup_rdfmarshaller()
+setup_depiction()
 PloneTestCase.setupPloneSite(
         products=PRODUCTS,
         extension_profiles=['eea.rdfmarshaller:testfixture'])
