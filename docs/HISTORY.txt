@@ -1,6 +1,9 @@
 Changelog
 =========
 
+10.0.dev0 - (unreleased)
+------------------------
+
 9.9 - (2017-06-26)
 ------------------
 * Change: added skos namespace to eea.rdfmarshaller
