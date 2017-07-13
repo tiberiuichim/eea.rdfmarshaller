@@ -3,6 +3,8 @@ Changelog
 
 10.0.dev0 - (unreleased)
 ------------------------
+* Bug fix: For dexterity use relatedItems for backreferences @pingCRSDS_backrel
+  [iulianpetchesi refs #86764]
 
 9.9 - (2017-06-26)
 ------------------

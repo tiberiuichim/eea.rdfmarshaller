@@ -96,7 +96,13 @@ class PingCRActionExecutor(object):
         def pingCRSDS_backrel(service_to_ping, obj, create):
             """ Ping backward relations
             """
-            back_relations = obj.getBRefs('relatesTo')
+            if hasattr(obj, 'getBRefs'):
+                back_relations = obj.getBRefs('relatesTo')
+            else:
+                back_relations = [o.to_object
+                    for o in getattr(obj, 'relatedItems')
+                ]
+
             for rel in back_relations:
                 if rel is not None:
                     obj_url = "%s/@@rdf" % rel.absolute_url()
