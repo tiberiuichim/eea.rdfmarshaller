@@ -95,7 +95,9 @@ class ATFileField2Surf(ATField2Surf):
         # 22047 check if value isn't a false value, images with no data
         # will return an empty string
         # value = self.field.getAccessor(self.context)()
-        size = self.field.get_size()
+        size = self.field.get_size(self.context)
+        if not size:
+            return
 
         Distribution = self.session.get_class(surf.ns.DCAT['Distribution'])
         dist = Distribution(field_url + "#fileInfo")

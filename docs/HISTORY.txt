@@ -5,6 +5,9 @@ Changelog
 ------------------------
 * Bug fix: For dexterity use relatedItems for backreferences @pingCRSDS_backrel
   [iulianpetchesi refs #86764]
+* Bug fix: Properly export size for file fields.
+  Don't include file field in rdf output when field has no value
+  [zoltan_andras refs #86696]
 
 9.9 - (2017-06-26)
 ------------------
