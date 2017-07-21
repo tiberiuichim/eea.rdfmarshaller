@@ -8,6 +8,8 @@ Changelog
 * Bug fix: Properly export size for file fields.
   Don't include file field in rdf output when field has no value
   [zoltan_andras refs #86696]
+* Change: Added some unit tests for file fields
+  [zoltan_andras refs #86696]
 
 9.9 - (2017-06-26)
 ------------------
