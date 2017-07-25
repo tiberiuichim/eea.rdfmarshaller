@@ -139,3 +139,49 @@ All AT objects have eea:objectProvides information:
   >>> provides = list(folder.eea_objectProvides.order())
   >>> print provides[0]
   AccessControl.interfaces.IOwned
+
+
+File field representation in rdf marshaller
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  >>> surf.ns.register(FILE='%s#' % self.portal.portal_types['File'].absolute_url())
+  >>> File = session.get_class(surf.ns.FILE['File'])
+  >>> rdf = marshaller.marshall(portal.valentine.zip1)[2]
+  >>> store.load_triples(source=StringIO(rdf))
+  True
+  >>> f = [f for f in File.all()][0]
+
+File fields are exported as by their name. The value is a SchemaMediaObject:
+
+  >>> f.file_file
+  [<surf.session.SchemaMediaObject object at ...>]
+
+  >>> mediaobject = f.file_file.first
+  >>> mediaobject.subject
+  rdflib.URIRef('http://nohost/plone/valentine/zip1/file')
+
+We export dcat:Distribution information as a predicate "fileInfo":
+
+  >>> fileInfo = mediaobject.eea_fileInfo.first
+  >>> fileInfo
+  <surf.session.DcatDistribution object at ...>
+  >>> fileInfo.subject
+  rdflib.URIRef('http://nohost/plone/valentine/zip1/file#fileInfo')
+
+This distribution information has size in bytes and download url:
+
+  >>> fileInfo.dcat_sizeInBytes
+  [rdflib.Literal(u'21', datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#integer'))]
+  >>> fileInfo.dcat_downloadURL
+  [rdflib.URIRef('http://nohost/plone/valentine/zip1/at_download/file')]
+
+When no file is uploaded to the file field, fileInfo is not available in rdf
+
+  >>> fid = portal.valentine.invokeFactory('File', id='test2', title='Test file')
+  >>> testf = portal.valentine[fid]
+  >>> rdf = marshaller.marshall(testf)[2]
+  >>> store.load_triples(source=StringIO(rdf))
+  True
+  >>> sf = session.get_resource("http://nohost/plone/valentine/test2", File)
+  >>> sf.file_file
+  []
