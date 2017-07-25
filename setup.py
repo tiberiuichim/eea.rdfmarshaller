@@ -48,7 +48,8 @@ setup(name=name,
       extras_require={
           'test': [
               'Products.PloneTestCase',
-              'plone.app.testing'
+              'plone.app.testing',
+              'eea.depiction',
           ]
       },
       entry_points="""
