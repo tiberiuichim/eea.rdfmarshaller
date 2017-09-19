@@ -3,6 +3,9 @@ Changelog
 
 10.1.dev0 - (unreleased)
 ------------------------
+* Bug fix: sometimes collective.cover is not available, fallback on import
+  error
+  [tiberich]
 
 10.0 - (2017-08-16)
 -------------------
