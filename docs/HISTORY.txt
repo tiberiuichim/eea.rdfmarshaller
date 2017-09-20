@@ -3,6 +3,9 @@ Changelog
 
 10.1.dev0 - (unreleased)
 ------------------------
+* Change: upgrade rdflib and surf. Change logging to be compatible with new
+  version. Get rid of surf.rdflib dependency, now is included in latest Surf.
+  [tiberich #88194]
 * Bug fix: sometimes collective.cover is not available, fallback on import
   error
   [tiberich]
