@@ -1,10 +1,5 @@
 """ Marshaller module """
 
-import logging
-import sys
-import surf
-from zope.interface import implements, Interface
-from zope.component import adapts, queryMultiAdapter, subscribers
 from Products.Archetypes.Marshall import Marshaller
 from Products.CMFCore.interfaces._tools import ITypesTool
 from Products.CMFCore.utils import getToolByName
@@ -12,15 +7,23 @@ from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import IGenericObject2Surf, IObject2Surf
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from eea.rdfmarshaller.interfaces import ISurfSession
+from surf.log import set_logger
+from zope.component import adapts, queryMultiAdapter, subscribers
+from zope.interface import implements, Interface
+import logging
+import surf
+import sys
 
 DEBUG = False
-
-logging.basicConfig(level=logging.CRITICAL)
 
 surf.ns.register(EEA="http://www.eea.europa.eu/ontologies.rdf#")
 surf.ns.register(SKOS="http://www.w3.org/2004/02/skos/core#")
 surf.ns.register(DCAT="http://www.w3.org/ns/dcat#")
 surf.ns.register(SCHEMA="http://schema.org/")
+
+logger = logging.getLogger('eea.rdfmarshaller')
+logger.setLevel(level=logging.CRITICAL)
+set_logger(logger)
 
 
 class RDFMarshaller(Marshaller):
@@ -43,8 +46,6 @@ class RDFMarshaller(Marshaller):
 
         store = surf.Store(reader='rdflib', writer='rdflib',
                            rdflib_store='IOMemory')
-        store.log.setLevel(logging.CRITICAL)
-        store.writer.log.setLevel(logging.CRITICAL)
 
         store.reader.graph.bind('dc', surf.ns.DC, override=True)
         store.reader.graph.bind('dcterms', surf.ns.DCTERMS, override=True)
