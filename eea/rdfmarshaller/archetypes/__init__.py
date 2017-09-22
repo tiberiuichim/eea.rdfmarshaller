@@ -1,8 +1,5 @@
-""" Archetypes
+""" Archetypes specific implementation of marshalling adapters
 """
-import sys
-import rdflib
-import surf
 
 from OFS.interfaces import IFolder
 from Products.Archetypes.interfaces import IBaseObject
@@ -24,6 +21,9 @@ from zope.component import getMultiAdapter
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implements, Interface
+import rdflib
+import surf
+import sys
 
 
 class Archetype2Surf(GenericObject2Surf):
@@ -273,6 +273,7 @@ class FTI2Surf(GenericObject2Surf):
 
         context = self.context
         session = self.session
+        # import pdb; pdb.set_trace()
 
         setattr(resource, 'rdfs_label', (context.Title(), u'en'))
         setattr(resource, 'rdfs_comment', (context.Description(), u'en'))

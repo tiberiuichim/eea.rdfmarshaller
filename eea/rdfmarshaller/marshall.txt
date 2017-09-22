@@ -14,8 +14,8 @@ schemas and own content types.
   >>> news.setCreators(['ab','sasha','ture'])
   >>> news.setDescription('my description')
   >>> news.setText(u'my news rocks!')
-  >>> folder.portal_workflow.doActionFor(news, 'publish') 
-  >>> folder.portal_workflow.doActionFor(folder, 'publish') 
+  >>> folder.portal_workflow.doActionFor(news, 'publish')
+  >>> folder.portal_workflow.doActionFor(folder, 'publish')
 
 Add an Image so we can test marshalling binary objects.
 
@@ -40,7 +40,7 @@ Add an Image so we can test marshalling binary objects.
   >>> import surf
   >>> surf.ns.register(NEWSITEM='%s#' % self.portal.portal_types['News Item'].absolute_url())
   >>> surf.ns.register(FOLDER='%s#' % self.portal.portal_types['Folder'].absolute_url())
-  
+
 Let's marshall the folder and the news item
 
   >>> content_type, length, data = marshaller.marshall(folder)
@@ -69,7 +69,7 @@ Load news triples into the rdf store
   >>> store.load_triples(source=StringIO(datanews))
   True
 
-  
+
   >>> Folder = session.get_class(surf.ns.FOLDER['Folder'])
   >>> folderIds = [obj.folder_id.first.strip() for obj in Folder.all().order()]
   >>> folderIds
@@ -90,16 +90,16 @@ Exporting a vocabulary
   >>> content_type, length, data = marshaller.marshall(vocab)
   >>> store.load_triples(source=StringIO(data))
   True
-  >>> SimpleVocabulary = session.get_class(surf.ns.SIMPLEVOCABULARY['SimpleVocabulary']) 
+  >>> SimpleVocabulary = session.get_class(surf.ns.SIMPLEVOCABULARY['SimpleVocabulary'])
   >>> [obj.simplevocabulary_id.first.strip() for obj in SimpleVocabulary.all()]
   [u'eea.rdfmarshaller.vocab.testing']
- 
+
 Load all the vocabolary terms into store
 
   >>> [store.load_triples(source=StringIO(marshaller.marshall(term)[2])) for term in vocab.objectValues()]
   [True, True, True, True, True, True]
-  
-  >>> SimpleVocabularyTerm = session.get_class(surf.ns.SIMPLEVOCABULARYTERM['SimpleVocabularyTerm']) 
+
+  >>> SimpleVocabularyTerm = session.get_class(surf.ns.SIMPLEVOCABULARYTERM['SimpleVocabularyTerm'])
   >>> sorted([(obj.simplevocabularyterm_id.first.strip(), obj.dcterms_title.first.strip()) for obj in SimpleVocabularyTerm.all()], key=lambda t:t[0])
   [(u'air pollution', u'Air pollution'), (u'biodiversity', u'Nature protection and biodiversity'), (u'climate change', u'Climate change mitigation'), (u'freshwater', u'Freshwater'), (u'land', u'Land use'), (u'waste', u'Waste')]
 
@@ -117,17 +117,17 @@ A folder uses dcterms:hasPart to tell which content it has.
 
   >>> folder = self.portal[self.portal.invokeFactory('Folder', id='myfolder')]
   >>> news1 = folder[folder.invokeFactory('News Item', id='news1')]
-  >>> folder.portal_workflow.doActionFor(news1, 'publish') 
+  >>> folder.portal_workflow.doActionFor(news1, 'publish')
   >>> news2 = folder[folder.invokeFactory('News Item', id='news2')]
-  >>> folder.portal_workflow.doActionFor(news2, 'publish') 
+  >>> folder.portal_workflow.doActionFor(news2, 'publish')
   >>> content_type, length, data = marshaller.marshall(folder)
   >>> store.load_triples(source=StringIO(data))
   True
-   
+
   >>> parts = [part for part in session.get_resource(folder.absolute_url(), Folder).dcterms_hasPart]
   >>> parts.sort()
   >>> parts
-  [rdflib.URIRef('http://nohost/plone/myfolder/news1'), rdflib.URIRef('http://nohost/plone/myfolder/news2')]
+  [rdflib.term.URIRef(u'http://nohost/plone/myfolder/news1'), rdflib.term.URIRef(u'http://nohost/plone/myfolder/news2')]
 
 
 The objectProvides modifier
@@ -154,26 +154,26 @@ File field representation in rdf marshaller
 File fields are exported as by their name. The value is a SchemaMediaObject:
 
   >>> f.file_file
-  [<surf.session.SchemaMediaObject object at ...>]
+  [<surf.resource.SchemaMediaObject object at ...>]
 
   >>> mediaobject = f.file_file.first
   >>> mediaobject.subject
-  rdflib.URIRef('http://nohost/plone/valentine/zip1/file')
+  rdflib.term.URIRef(u'http://nohost/plone/valentine/zip1/file')
 
 We export dcat:Distribution information as a predicate "fileInfo":
 
   >>> fileInfo = mediaobject.eea_fileInfo.first
   >>> fileInfo
-  <surf.session.DcatDistribution object at ...>
+  <surf.resource.DcatDistribution object at ...>
   >>> fileInfo.subject
-  rdflib.URIRef('http://nohost/plone/valentine/zip1/file#fileInfo')
+  rdflib.term.URIRef(u'http://nohost/plone/valentine/zip1/file#fileInfo')
 
 This distribution information has size in bytes and download url:
 
   >>> fileInfo.dcat_sizeInBytes
-  [rdflib.Literal(u'21', datatype=rdflib.URIRef('http://www.w3.org/2001/XMLSchema#integer'))]
+  [rdflib.term.Literal(u'21', datatype=rdflib.term.URIRef(u'http://www.w3.org/2001/XMLSchema#integer'))]
   >>> fileInfo.dcat_downloadURL
-  [rdflib.URIRef('http://nohost/plone/valentine/zip1/at_download/file')]
+  [rdflib.term.URIRef(u'http://nohost/plone/valentine/zip1/at_download/file')]
 
 When no file is uploaded to the file field, fileInfo is not available in rdf
 

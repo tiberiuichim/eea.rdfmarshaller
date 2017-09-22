@@ -3,7 +3,6 @@
 from Products.Archetypes.Marshall import Marshaller
 from Products.CMFCore.interfaces._tools import ITypesTool
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import log
 from eea.rdfmarshaller.interfaces import IGenericObject2Surf, IObject2Surf
 from eea.rdfmarshaller.interfaces import ISurfResourceModifier
 from eea.rdfmarshaller.interfaces import ISurfSession
@@ -12,7 +11,7 @@ from zope.component import adapts, queryMultiAdapter, subscribers
 from zope.interface import implements, Interface
 import logging
 import surf
-import sys
+
 
 DEBUG = False
 
@@ -20,6 +19,11 @@ surf.ns.register(EEA="http://www.eea.europa.eu/ontologies.rdf#")
 surf.ns.register(SKOS="http://www.w3.org/2004/02/skos/core#")
 surf.ns.register(DCAT="http://www.w3.org/ns/dcat#")
 surf.ns.register(SCHEMA="http://schema.org/")
+
+# re-register the RDF + RDFS namespace because in new surf they are closed
+# namespaces and they won't "take" the custom terms that we access on them
+surf.ns.register(RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+surf.ns.register(RDFS="http://www.w3.org/2000/01/rdf-schema#")
 
 logger = logging.getLogger('eea.rdfmarshaller')
 logger.setLevel(level=logging.CRITICAL)
@@ -116,8 +120,11 @@ class GenericObject2Surf(object):
             return self._namespace
 
         ttool = getToolByName(self.context, 'portal_types')
-        surf.ns.register(**{self.prefix: '%s#' %
-                            ttool[self.context.portal_type].absolute_url()})
+        ptype = self.context.portal_type
+        ns = {
+            self.prefix: '%s#' % ttool[ptype].absolute_url()
+        }
+        surf.ns.register(**ns)
         self._namespace = getattr(surf.ns, self.prefix.upper())
         return self._namespace
 
@@ -142,11 +149,10 @@ class GenericObject2Surf(object):
             resource = self.session.get_class(
                 self.namespace[self.portalType])(self.subject)
         except Exception:
+            # import pdb; pdb.set_trace()
             if DEBUG:
                 raise
-            log.log('RDF marshaller error \n%s: %s' %
-                    (sys.exc_info()[0], sys.exc_info()[1]),
-                    severity=log.logging.WARN)
+            logger.exception('RDF marshaller error:')
             return None
 
         resource.bind_namespaces([self.prefix])
@@ -162,6 +168,10 @@ class GenericObject2Surf(object):
         """Write its resource into the session """
 
         resource = self.resource
+
+        if resource is None:
+            raise ValueError
+            return
 
         # we modify the resource and then allow subscriber plugins to modify it
         resource = self.modify_resource(self.resource, *args, **kwds)

@@ -1,8 +1,5 @@
-""" fields module """
+""" Dexterity fields adapters for marshalling """
 
-import sys
-import rdflib
-import surf
 from Acquisition import aq_base
 from Products.CMFPlone import log
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
@@ -14,6 +11,10 @@ from plone.app.textfield.value import RichTextValue
 from zope.component import adapts
 from zope.interface import implements, Interface
 from zope.schema.interfaces import IField
+import rdflib
+import surf
+import sys
+
 
 try:
     from z3c.relationfield.interfaces import IRelationList

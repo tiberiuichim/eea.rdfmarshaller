@@ -49,14 +49,14 @@ Then we try to find the class definition in the parsed rdf.
 Now let see if we have a label and a comment in the english language.
 
   >>> folderClass.rdfs_label.first
-  rdflib.Literal(u'Folder', lang=u'en')
+  rdflib.term.Literal(u'Folder', lang=u'en')
   >>> folderClass.rdfs_comment.first
-  rdflib.Literal(u'', lang=u'en')
+  rdflib.term.Literal(u'', lang=u'en')
 
-# Note: plone 4 doesn't set the description inside Folder.xml  
+# Note: plone 4 doesn't set the description inside Folder.xml
 # like news item contenttype does, therefore we get an empty description
 # instead of:
-# rdflib.Literal(u'A folder which can contain other items.', lang=u'en')
+# rdflib.term.Literal(u'A folder which can contain other items.', lang=u'en')
 
 
 Now lets try the same thing on Document type.
@@ -67,9 +67,9 @@ Now lets try the same thing on Document type.
   >>> docNS = surf.ns.Namespace('%s#' % ttool.Document.absolute_url())
   >>> docClass = session.get_class(docNS['Document'])
   >>> docClass.rdfs_label.first
-  rdflib.Literal(u'Page', lang=u'en')
+  rdflib.term.Literal(u'Page', lang=u'en')
   >>> docClass.rdfs_comment.first
-  rdflib.Literal(u'', lang=u'en')
+  rdflib.term.Literal(u'', lang=u'en')
 
 And lets try a 'News Item' which has space in the id and title. Spaces are not
 allowed in tags so we remove them. This could conflict if you happen to have
@@ -81,9 +81,9 @@ an other content type that is named 'NewsItem', but why should you have that? :)
   >>> newsNS = surf.ns.Namespace('%s#' % ttool['News Item'].absolute_url())
   >>> newsClass = session.get_class(newsNS['NewsItem'])
   >>> newsClass.rdfs_label.first
-  rdflib.Literal(u'News Item', lang=u'en')
+  rdflib.term.Literal(u'News Item', lang=u'en')
   >>> newsClass.rdfs_comment.first
-  rdflib.Literal(u'An announcement that will show up in news listings.', lang=u'en')
+  rdflib.term.Literal(u'An announcement that will show up in news listings.', lang=u'en')
 
 Schema extender
 ~~~~~~~~~~~~~~~
@@ -107,12 +107,11 @@ First we create an schema extender
   ...     adapts(IATDocument)
   ...     implements(ISchemaExtender)
   ...
-  ...
   ...     fields = [
   ...         MyBooleanField("super_power",
-  ...         widget = BooleanWidget(
+  ...           widget = BooleanWidget(
   ...             label="This page has super powers")),
-  ...             ]
+  ...     ]
   ...
   ...     def __init__(self, context):
   ...         self.context = context
@@ -128,4 +127,4 @@ First we create an schema extender
   True
   >>> ourField = session.get_class(docNS['super_power'])
   >>> ourField.rdfs_label.first
-  rdflib.Literal(u'This page has super powers', lang=u'en')
+  rdflib.term.Literal(u'This page has super powers', lang=u'en')

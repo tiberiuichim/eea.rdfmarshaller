@@ -1,14 +1,12 @@
 """ rdfmarshaller adapters for dexterity content
 """
 
-import sys
-import surf
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
-from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
-from eea.rdfmarshaller.interfaces import IValue2Surf
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
+from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
 from eea.rdfmarshaller.interfaces import ISurfSession
+from eea.rdfmarshaller.interfaces import IValue2Surf
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.behavior.interfaces import IBehavior
@@ -21,6 +19,8 @@ from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.schema import getFieldsInOrder
+import surf
+import sys
 
 
 def non_fieldset_fields(schema):
@@ -214,7 +214,7 @@ class DexterityFTI2Surf(GenericObject2Surf):
 
     adapts(IDexterityFTI, ISurfSession)
 
-    _namespace = surf.ns.RDFS
+    _namespace = surf.ns.RDFS    # we need an open namespage
     _prefix = 'rdfs'
 
     # fields not to export, i.e Dublin Core

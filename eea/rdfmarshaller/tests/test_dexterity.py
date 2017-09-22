@@ -37,7 +37,8 @@ class TestProgramIntegration(unittest.TestCase):
         ptypes = self.portal['portal_types']
         testpage_fti = ptypes['testpage']
         req = self.portal.REQUEST
-        rdf = getMultiAdapter((testpage_fti, req), name="rdf")()
+        view = getMultiAdapter((testpage_fti, req), name="rdf")
+        rdf = view()
         if isinstance(rdf, unicode):
             rdf = rdf.encode()
         e = lxml.etree.fromstring(rdf)
