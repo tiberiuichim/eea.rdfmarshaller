@@ -1,20 +1,20 @@
 """ Dexterity fields adapters for marshalling """
 
+import sys
+
+from zope.component import adapts
+from zope.interface import Interface, implements
+from zope.schema.interfaces import IField
+
+import rdflib
+import surf
 from Acquisition import aq_base
-from Products.CMFPlone import log
 from eea.rdfmarshaller.dexterity.interfaces import IDXField2Surf
-from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
-from eea.rdfmarshaller.interfaces import ISurfSession
+from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf, ISurfSession
 from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from eea.rdfmarshaller.value import Value2Surf
 from plone.app.textfield.value import RichTextValue
-from zope.component import adapts
-from zope.interface import implements, Interface
-from zope.schema.interfaces import IField
-import rdflib
-import surf
-import sys
-
+from Products.CMFPlone import log
 
 try:
     from z3c.relationfield.interfaces import IRelationList
@@ -48,6 +48,7 @@ class DXField2Surf(object):
         try:
             if callable(value):
                 value = value()
+
             return value
         except Exception:
             log.log('RDF marshaller error for context[field]'
@@ -87,16 +88,19 @@ class DexterityField2RdfSchema(GenericObject2Surf):
     @property
     def portalType(self):
         """ portal type """
+
         return u'Property'
 
     @property
     def rdfId(self):
         """ rdf id """
+
         return self.context.getName().replace(' ', '')
 
     @property
     def subject(self):
         """ subject """
+
         return '%s#%s' % (self.fti.absolute_url(), self.context.getName())
 
     def modify_resource(self, resource, *args, **kwargs):
@@ -112,6 +116,7 @@ class DexterityField2RdfSchema(GenericObject2Surf):
         setattr(resource, 'rdfs_comment', widget_description)
         setattr(resource, 'rdf_id', self.rdfId)
         setattr(resource, 'rdf_domain', fti_title.replace(' ', ''))
+
         return resource
 
 
@@ -126,6 +131,7 @@ if HAS_Z3C_RELATIONFIELD:
             value = super(DXRelationList2Surf, self).value()
 
             # some reference fields are single value only
+
             if not isinstance(value, (list, tuple)):
                 value = [value]
 
@@ -143,4 +149,5 @@ if HAS_Z3C_RELATIONFIELD:
 
             value = self.value
             obj = value.to_object
+
             return rdflib.URIRef(obj.absolute_url())

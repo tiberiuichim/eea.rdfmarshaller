@@ -1,12 +1,14 @@
 """ extras """
 
-from Products.CMFPlone import log
-from eea.rdfmarshaller.dexterity.modifiers import BaseFileModifier
-from eea.rdfmarshaller.interfaces import ISurfResourceModifier
-from plone.app.contenttypes.interfaces import IImage, IFile
+import sys
+
 from zope.component import adapts
 from zope.interface import implements
-import sys
+
+from eea.rdfmarshaller.dexterity.modifiers import BaseFileModifier
+from eea.rdfmarshaller.interfaces import ISurfResourceModifier
+from plone.app.contenttypes.interfaces import IFile, IImage
+from Products.CMFPlone import log
 
 try:
     from collective.cover.interfaces import ICover
@@ -33,15 +35,19 @@ class CoverTilesModifier(object):
         """
         uids = self.context.list_tiles()
         value = ''
+
         for uid in uids:
             tile = self.context.get_tile(uid)
             text = tile.data.get('text', None)
+
             if text:
                 # convert to unicode
+
                 if not isinstance(text.output, unicode):
                     value += unicode(text.output, 'utf-8')
                 else:
                     value += text.output
+
         if value:
             try:
                 setattr(resource, '%s_%s' % ("eea", "cover_tiles"),
@@ -52,6 +58,7 @@ class CoverTilesModifier(object):
                         (self.context.absolute_url(),
                          sys.exc_info()[0], sys.exc_info()[1]),
                         severity=log.logging.WARN)
+
         return resource
 
 

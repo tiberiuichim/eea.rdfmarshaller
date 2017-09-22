@@ -1,29 +1,27 @@
 """ Archetypes specific implementation of marshalling adapters
 """
 
+import sys
+
+from zope.component import (adapts, getMultiAdapter, queryAdapter,
+                            queryMultiAdapter)
+from zope.interface import Interface, implements
+
+import rdflib
+import surf
+from eea.rdfmarshaller.archetypes.interfaces import (IArchetype2Surf,
+                                                     IATField2Surf,
+                                                     IATVocabularyTerm)
+from eea.rdfmarshaller.config import DEBUG
+from eea.rdfmarshaller.interfaces import (IFieldDefinition2Surf, IObject2Surf,
+                                          ISurfSession, IValue2Surf)
+from eea.rdfmarshaller.marshaller import GenericObject2Surf
 from OFS.interfaces import IFolder
-from Products.Archetypes.interfaces import IBaseObject
-from Products.Archetypes.interfaces import IField
+from Products.Archetypes.interfaces import IBaseObject, IField
 from Products.CMFCore.interfaces import ITypeInformation
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import log
 from Products.CMFPlone.utils import _createObjectByType
-from eea.rdfmarshaller.archetypes.interfaces import IATField2Surf
-from eea.rdfmarshaller.archetypes.interfaces import IATVocabularyTerm
-from eea.rdfmarshaller.archetypes.interfaces import IArchetype2Surf
-from eea.rdfmarshaller.config import DEBUG
-from eea.rdfmarshaller.interfaces import IFieldDefinition2Surf
-from eea.rdfmarshaller.interfaces import ISurfSession, IObject2Surf
-from eea.rdfmarshaller.interfaces import IValue2Surf
-from eea.rdfmarshaller.marshaller import GenericObject2Surf
-from zope.component import adapts
-from zope.component import getMultiAdapter
-from zope.component import queryAdapter
-from zope.component import queryMultiAdapter
-from zope.interface import implements, Interface
-import rdflib
-import surf
-import sys
 
 
 class Archetype2Surf(GenericObject2Surf):
@@ -55,25 +53,30 @@ class Archetype2Surf(GenericObject2Surf):
         """ These fields shouldn't be exported """
         ptool = getToolByName(self.context, 'portal_properties')
         props = getattr(ptool, 'rdfmarshaller_properties', None)
+
         if props:
             return list(props.getProperty('%s_blacklist'
                                           % self.portalType.lower(),
                                           props.getProperty('blacklist')))
+
         return self._blacklist
 
     @property
     def portalType(self):
         """ Portal type """
+
         return self.context.portal_type.replace(' ', '')
 
     @property
     def prefix(self):
         """ Prefix """
+
         return self.portalType.lower()
 
     @property
     def subject(self):
         """ Subject """
+
         return self.context.absolute_url()
 
     def modify_resource(self, resource, *args, **kwds):
@@ -86,11 +89,13 @@ class Archetype2Surf(GenericObject2Surf):
         workflowTool = getToolByName(self.context, "portal_workflow")
         wfs = workflowTool.getWorkflowsFor(self.context)
         wf = None
+
         for wf in wfs:
             if wf.isInfoSupported(self.context, "portal_workflow"):
                 break
 
         status = workflowTool.getInfoFor(self.context, "review_state", None)
+
         if status is not None:
             status = ''.join([portal_url,
                               "/portal_workflow/",
@@ -117,6 +122,7 @@ class Archetype2Surf(GenericObject2Surf):
             fieldAdapter = queryMultiAdapter(
                 (field, self.context, self.session),
                 interface=IATField2Surf, name=fieldName)
+
             if not fieldAdapter:
                 fieldAdapter = getMultiAdapter(
                     (field, self.context, self.session),
@@ -135,8 +141,10 @@ class Archetype2Surf(GenericObject2Surf):
                         severity=log.logging.WARN)
 
             valueAdapter = queryAdapter(value, interface=IValue2Surf)
+
             if valueAdapter:
                 value = valueAdapter(language=language)
+
             if not value or value == "None":
                 continue
 
@@ -174,6 +182,7 @@ class ATFolderish2Surf(Archetype2Surf):
         currentLevel += 1
         resource = super(ATFolderish2Surf, self).modify_resource(
             resource, currentLevel=currentLevel, endLevel=endLevel)
+
         if currentLevel <= endLevel or endLevel == 0:
             resource.dcterms_hasPart = []
 
@@ -189,6 +198,7 @@ class ATFolderish2Surf(Archetype2Surf):
             for obj in objs:
                 resource.dcterms_hasPart.append(rdflib.URIRef(
                     obj.absolute_url()))
+
         return resource
 
 
@@ -212,16 +222,19 @@ class ATField2RdfSchema(GenericObject2Surf):
     @property
     def portalType(self):
         """ portal type """
+
         return u'Property'
 
     @property
     def rdfId(self):
         """ rdf id """
+
         return self.context.getName().replace(' ', '')
 
     @property
     def subject(self):
         """ subject """
+
         return '%s#%s' % (self.fti.absolute_url(), self.context.getName())
 
     def modify_resource(self, resource, *args, **kwargs):
@@ -236,6 +249,7 @@ class ATField2RdfSchema(GenericObject2Surf):
         setattr(resource, 'rdfs_comment', widget_description)
         setattr(resource, 'rdf_id', self.rdfId)
         setattr(resource, 'rdf_domain', fti_title)
+
         return resource
 
 
@@ -308,13 +322,16 @@ class FTI2Surf(GenericObject2Surf):
                 catalog = getToolByName(context, 'portal_catalog')
                 tmpPath = '%s/rdfstype' % '/'.join(tmpFolder.getPhysicalPath())
                 brains = catalog(path=tmpPath)
+
                 for br in brains:
                     catalog.uncatalog_object(br.getPath())
 
         if hasattr(instance, 'Schema'):
             schema = instance.Schema()
+
             for field in schema.fields():
                 fieldName = field.getName()
+
                 if fieldName in self.blacklist_map:
                     continue
 
@@ -334,5 +351,6 @@ class ATVocabularyTerm2Surf(Archetype2Surf):
     @property
     def blacklist_map(self):
         """ Blacklist map """
+
         return super(ATVocabularyTerm2Surf, self).blacklist_map + \
             ['creation_date', 'modification_date', 'creators']

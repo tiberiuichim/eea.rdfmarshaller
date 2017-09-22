@@ -1,17 +1,17 @@
 """ Marshaller module """
 
+import logging
+
+from zope.component import adapts, queryMultiAdapter, subscribers
+from zope.interface import Interface, implements
+
+import surf
+from eea.rdfmarshaller.interfaces import (IGenericObject2Surf, IObject2Surf,
+                                          ISurfResourceModifier, ISurfSession)
 from Products.Archetypes.Marshall import Marshaller
 from Products.CMFCore.interfaces._tools import ITypesTool
 from Products.CMFCore.utils import getToolByName
-from eea.rdfmarshaller.interfaces import IGenericObject2Surf, IObject2Surf
-from eea.rdfmarshaller.interfaces import ISurfResourceModifier
-from eea.rdfmarshaller.interfaces import ISurfSession
 from surf.log import set_logger
-from zope.component import adapts, queryMultiAdapter, subscribers
-from zope.interface import implements, Interface
-import logging
-import surf
-
 
 DEBUG = False
 
@@ -45,6 +45,7 @@ class RDFMarshaller(Marshaller):
     def store(self):
         """Factory for store objects
         """
+
         if self._store is not None:
             return self._store
 
@@ -62,6 +63,7 @@ class RDFMarshaller(Marshaller):
         store.reader.graph.bind('foaf', surf.ns.FOAF, override=True)
 
         self._store = store
+
         return store
 
     def marshall(self, instance, **kwargs):
@@ -81,6 +83,7 @@ class RDFMarshaller(Marshaller):
         obj2surf.write(endLevel=endLevel)
 
         data = self.store.reader.graph.serialize(format='pretty-xml')
+
         return (content_type, length, data)
 
 
@@ -104,18 +107,22 @@ class GenericObject2Surf(object):
     @property
     def prefix(self):
         """ prefix """
+
         if self._prefix is None:
             raise NotImplementedError
+
         return self._prefix
 
     @property
     def portalType(self):
         """ portal type """
+
         return self.context.__class__.__name__
 
     @property
     def namespace(self):
         """ namespace """
+
         if self._namespace is not None:
             return self._namespace
 
@@ -126,16 +133,19 @@ class GenericObject2Surf(object):
         }
         surf.ns.register(**ns)
         self._namespace = getattr(surf.ns, self.prefix.upper())
+
         return self._namespace
 
     @property
     def subject(self):
         """ subject; will be inserted as rdf:about """
+
         return '%s#%s' % (self.context.absolute_url(), self.rdfId)
 
     @property
     def rdfId(self):
         """ rdf id; will be inserted as rdf:id  """
+
         return self.context.getId().replace(' ', '')
 
     @property
@@ -150,18 +160,22 @@ class GenericObject2Surf(object):
                 self.namespace[self.portalType])(self.subject)
         except Exception:
             # import pdb; pdb.set_trace()
+
             if DEBUG:
                 raise
             logger.exception('RDF marshaller error:')
+
             return None
 
         resource.bind_namespaces([self.prefix])
         resource.session = self.session
         self._resource = resource
+
         return resource
 
     def modify_resource(self, resource, *args, **kwds):
         """We allow modification of resource here """
+
         return resource
 
     def write(self, *args, **kwds):
@@ -171,10 +185,12 @@ class GenericObject2Surf(object):
 
         if resource is None:
             raise ValueError
+
             return
 
         # we modify the resource and then allow subscriber plugins to modify it
         resource = self.modify_resource(self.resource, *args, **kwds)
+
         for modifier in subscribers([self.context], ISurfResourceModifier):
             modifier.run(resource, *args, **kwds)
 
@@ -195,6 +211,7 @@ class PortalTypesUtil2Surf(GenericObject2Surf):
     @property
     def portalType(self):
         """portal type"""
+
         return u'PloneUtility'
 
     def modify_resource(self, resource, *args, **kwds):
