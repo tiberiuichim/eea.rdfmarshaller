@@ -181,12 +181,8 @@ class GenericObject2Surf(object):
     def write(self, *args, **kwds):
         """Write its resource into the session """
 
-        resource = self.resource
-
-        if resource is None:
+        if self.resource is None:
             raise ValueError
-
-            return
 
         # we modify the resource and then allow subscriber plugins to modify it
         resource = self.modify_resource(self.resource, *args, **kwds)
