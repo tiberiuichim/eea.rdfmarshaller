@@ -1,6 +1,9 @@
 Changelog
 =========
 
+10.2.dev0 - (unreleased)
+------------------------
+
 10.1 - (2017-09-22)
 -------------------
 * Change: upgrade rdflib and surf. Change logging to be compatible with new
