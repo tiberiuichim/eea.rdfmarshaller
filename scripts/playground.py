@@ -2,10 +2,8 @@
 
 """ experimentation with surf.rdflib API """
 
-import logging
 import rdflib
 import surf
-
 
 surf.ns.register(EEA="http://www.eea.europa.eu/ontologies.rdf#")
 surf.ns.register(DCAT="http://www.w3.org/ns/dcat#")
