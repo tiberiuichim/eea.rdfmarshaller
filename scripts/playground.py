@@ -18,8 +18,6 @@ def make_store():
     """
     store = surf.Store(reader='rdflib', writer='rdflib',
                        rdflib_store='IOMemory')
-    store.log.setLevel(logging.CRITICAL)
-    store.writer.log.setLevel(logging.CRITICAL)
 
     store.reader.graph.bind('dc', surf.ns.DC, override=True)
     store.reader.graph.bind('dcterms', surf.ns.DCTERMS, override=True)

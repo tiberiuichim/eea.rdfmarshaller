@@ -3,6 +3,8 @@ Changelog
 
 10.2.dev0 - (unreleased)
 ------------------------
+* Cleanup: Remove obsolete store.log references
+  [avoinea]
 
 10.1 - (2017-09-22)
 -------------------
