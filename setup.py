@@ -45,6 +45,7 @@ setup(name=name,
           'Products.ATVocabularyManager',
           'chardet',
           'eventlet',
+          'rdflib_jsonld>=0.4.0',
       ],
       extras_require={
           'test': [
