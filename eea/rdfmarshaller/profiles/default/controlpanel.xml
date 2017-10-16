@@ -5,12 +5,25 @@
   i18n:domain="silvuple">
 
   <configlet
-    title="Licenses Settings"
+    title="Global Licenses"
     action_id="rdfmarshaller_licenses"
     appId="rdfmarshaller"
     category="Products"
     condition_expr=""
     url_expr="string:${portal_url}/@@licenses-settings"
+    icon_expr=""
+    visible="True"
+    i18n:attributes="title">
+    <permission>Manage portal</permission>
+  </configlet>
+
+  <configlet
+    title="Portal Types Licenses"
+    action_id="rdfmarshaller_portal_type_licenses"
+    appId="rdfmarshaller"
+    category="Products"
+    condition_expr=""
+    url_expr="string:${portal_url}/@@portal-type-licenses-settings"
     icon_expr=""
     visible="True"
     i18n:attributes="title">

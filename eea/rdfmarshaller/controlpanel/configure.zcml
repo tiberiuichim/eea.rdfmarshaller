@@ -11,4 +11,14 @@
     permission="cmf.ManagePortal"
     />
 
+  <browser:page
+    name="portal-type-licenses-settings"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".license.PortalTypeLicensesView"
+    permission="cmf.ManagePortal"
+    />
+
+  <utility
+    component=".license.LicensesVocabularyFactory"
+    name="eea.rdfmarshaller.licenses" />
 </configure>
