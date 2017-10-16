@@ -39,10 +39,10 @@ class IPortalTypeLicenses(Interface):
         title=u"Licenses",
         description=u"Choose licenses.",
         key_type=schema.Choice(
-            title=u"License ID",
+            title=u"Portal Type",
             vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"),
         value_type=schema.Choice(
-            title=u"License Content",
+            title=u"License ID",
             vocabulary="eea.rdfmarshaller.licenses")
         )
 
