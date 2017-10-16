@@ -4,6 +4,5 @@
 
     <!-- Leave to empty string -->
     <!-- <value key="adminLanguage"></value> -->
-    <value key="licenses"></value>
   </records>
 </registry>
