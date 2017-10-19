@@ -14,38 +14,30 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 class ILicense(Interface):
-    field_a = schema.ASCIILine(
-        title=u"Field A",
-        description=u"Something A"
+    license_id = schema.ASCIILine(
+        title=u"License ID",
+        description=u"Used to assign a license to a portal type."
     )
 
-    field_b = schema.Text(
-        title=u"Field B",
-        description=u"Something B"
+    license_text = schema.Text(
+        title=u"License Text",
+        description=u"Human readable text of license"
     )
 
-    field_c = schema.ASCIILine(
-        title=u"Field C",
-        description=u"Something C"
+    license_url = schema.URI(
+        title=u"License URL",
+        description=u"Don't forget http:// or https://"
     )
 
 
 class ILicenses(Interface):
     """ Define settings data structure for licenses """
 
-    # rdfmarshaller_licenses = schema.Dict(
-    #     title=u"Licenses",
-    #     description=u"Define licenses.",
-    #     key_type=schema.TextLine(title=u"License Title"),
-    #     # value_type=schema.Text(title=u"License Text"))
-    #     value_type=DictRow(schema=ILicense))
-
     rdfmarshaller_licenses = schema.List(
         title=u"Licenses",
         description=u"Define available licenses",
         value_type=DictRow(title=u"License", schema=ILicense)
     )
-    # DataGridFieldFactory
     directives.widget(rdfmarshaller_licenses=BlockDataGridFieldFactory)
 
 
@@ -60,10 +52,6 @@ class LicensesView(ControlPanelFormWrapper):
     """ Licenses edit form """
 
     form = LicensesEditForm
-
-    # TODO ?
-    # Customize on edit: registry record to separated fields
-    # Customize on Save: separated fields to registry record
 
 
 class IPortalTypeLicenses(Interface):
@@ -104,7 +92,7 @@ class LicensesVocabulary(object):
                 ".rdfmarshaller_licenses"]
             items = [
                 SimpleTerm(str(y), str(y), str(y)) for y in [
-                    x.get('field_a') for x in licenses]  # TODO Use ID field
+                    x.get('license_id') for x in licenses]
                 ]
         except Exception:
             items = [SimpleTerm('WIP', 'WIP', 'WIP')]  # TODO Fix it.
