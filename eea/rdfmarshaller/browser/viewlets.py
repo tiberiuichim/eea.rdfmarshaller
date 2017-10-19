@@ -22,8 +22,9 @@ class LicenseViewlet(ViewletBase):
         reg_types = registry.get(REGISTRY_TYPE_LICENSES, None)
         reg_licenses = registry.get(REGISTRY_LICENSES, None)
         text = None
-        if reg_licenses is not None and reg_types is not None:
-            license_id = reg_types.get(self.context.portal_type, None)
-            if license_id is not None:
-                text = reg_licenses.get(license_id, None)
+        # TODO Update this & template
+        # if reg_licenses is not None and reg_types is not None:
+        #     license_id = reg_types.get(self.context.portal_type, None)
+        #     if license_id is not None:
+        #         text = reg_licenses.get(license_id, None)
         return text
