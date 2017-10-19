@@ -2,10 +2,8 @@
   <records interface="eea.rdfmarshaller.controlpanel.license.ILicenses">
 
     <record name="rdfmarshaller_licenses">
-      <field type="plone.registry.field.Dict">
+      <field type="plone.registry.field.List">
         <title>Licenses</title>
-        <key_type type="plone.registry.field.TextLine" />
-        <!-- <value_type type="collective.z3cform.datagridfield.datagridfield.DataGridField" /> -->
         <value_type type="collective.z3cform.datagridfield.DictRow">
           <schema>eea.rdfmarshaller.controlpanel.license.ILicense</schema>
         </value_type>

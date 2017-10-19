@@ -1,14 +1,16 @@
+from collective.z3cform.datagridfield import BlockDataGridFieldFactory
+from collective.z3cform.datagridfield.registry import DictRow
+from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
+from plone.app.registry.browser.controlpanel import RegistryEditForm
+from plone.autoform import directives
+from plone.registry.interfaces import IRegistry
+from zope import schema
+from zope.component import getUtility
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
-from plone.app.registry.browser.controlpanel import RegistryEditForm
-from zope import schema
-from zope.interface import Interface
-from zope.interface import implementer
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
-from collective.z3cform.datagridfield.registry import DictRow
 
 
 class ILicense(Interface):
@@ -17,7 +19,7 @@ class ILicense(Interface):
         description=u"Something A"
     )
 
-    field_b = schema.ASCIILine(
+    field_b = schema.Text(
         title=u"Field B",
         description=u"Something B"
     )
@@ -31,16 +33,25 @@ class ILicense(Interface):
 class ILicenses(Interface):
     """ Define settings data structure for licenses """
 
-    rdfmarshaller_licenses = schema.Dict(
+    # rdfmarshaller_licenses = schema.Dict(
+    #     title=u"Licenses",
+    #     description=u"Define licenses.",
+    #     key_type=schema.TextLine(title=u"License Title"),
+    #     # value_type=schema.Text(title=u"License Text"))
+    #     value_type=DictRow(schema=ILicense))
+
+    rdfmarshaller_licenses = schema.List(
         title=u"Licenses",
-        description=u"Define licenses.",
-        key_type=schema.TextLine(title=u"License Title"),
-        # value_type=schema.Text(title=u"License Text"))
-        value_type=DictRow(schema=ILicense))
+        description=u"Define available licenses",
+        value_type=DictRow(title=u"License", schema=ILicense)
+    )
+    # DataGridFieldFactory
+    directives.widget(rdfmarshaller_licenses=BlockDataGridFieldFactory)
 
 
 class LicensesEditForm(RegistryEditForm):
     """ Licenses definition edit form """
+
     schema = ILicenses
     label = u"Licenses definition"
 
@@ -92,9 +103,12 @@ class LicensesVocabulary(object):
                 "eea.rdfmarshaller.controlpanel.license.ILicenses"
                 ".rdfmarshaller_licenses"]
             items = [
-                SimpleTerm(str(i), str(i), str(i)) for i in licenses.keys()]
+                SimpleTerm(str(y), str(y), str(y)) for y in [
+                    x.get('field_a') for x in licenses]  # TODO Use ID field
+                ]
         except Exception:
             items = [SimpleTerm('WIP', 'WIP', 'WIP')]  # TODO Fix it.
+
         return SimpleVocabulary(items)
 
 
