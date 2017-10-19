@@ -8,6 +8,24 @@ from zope.interface import Interface
 from zope.interface import implementer
 from zope.component import getUtility
 from plone.registry.interfaces import IRegistry
+from collective.z3cform.datagridfield.registry import DictRow
+
+
+class ILicense(Interface):
+    field_a = schema.ASCIILine(
+        title=u"Field A",
+        description=u"Something A"
+    )
+
+    field_b = schema.ASCIILine(
+        title=u"Field B",
+        description=u"Something B"
+    )
+
+    field_c = schema.ASCIILine(
+        title=u"Field C",
+        description=u"Something C"
+    )
 
 
 class ILicenses(Interface):
@@ -17,10 +35,8 @@ class ILicenses(Interface):
         title=u"Licenses",
         description=u"Define licenses.",
         key_type=schema.TextLine(title=u"License Title"),
-        value_type=schema.Text(title=u"License Text"))
-
-    # content=schema.TextLine(title=u"Content License"),
-    # data=schema.TextLine(title=u"Data License"),
+        # value_type=schema.Text(title=u"License Text"))
+        value_type=DictRow(schema=ILicense))
 
 
 class LicensesEditForm(RegistryEditForm):
@@ -33,6 +49,10 @@ class LicensesView(ControlPanelFormWrapper):
     """ Licenses edit form """
 
     form = LicensesEditForm
+
+    # TODO ?
+    # Customize on edit: registry record to separated fields
+    # Customize on Save: separated fields to registry record
 
 
 class IPortalTypeLicenses(Interface):
@@ -67,10 +87,14 @@ class LicensesVocabulary(object):
 
     def __call__(self, context):
         registry = getUtility(IRegistry)
-        licenses = registry[
-            "eea.rdfmarshaller.controlpanel.license.ILicenses"
-            ".rdfmarshaller_licenses"]
-        items = [SimpleTerm(str(i), str(i), str(i)) for i in licenses.keys()]
+        try:
+            licenses = registry[
+                "eea.rdfmarshaller.controlpanel.license.ILicenses"
+                ".rdfmarshaller_licenses"]
+            items = [
+                SimpleTerm(str(i), str(i), str(i)) for i in licenses.keys()]
+        except Exception:
+            items = [SimpleTerm('WIP', 'WIP', 'WIP')]  # TODO Fix it.
         return SimpleVocabulary(items)
 
 

@@ -5,7 +5,10 @@
       <field type="plone.registry.field.Dict">
         <title>Licenses</title>
         <key_type type="plone.registry.field.TextLine" />
-        <value_type type="plone.registry.field.Text" />
+        <!-- <value_type type="collective.z3cform.datagridfield.datagridfield.DataGridField" /> -->
+        <value_type type="collective.z3cform.datagridfield.DictRow">
+          <schema>eea.rdfmarshaller.controlpanel.license.ILicense</schema>
+        </value_type>
       </field>
     </record>
   </records>
