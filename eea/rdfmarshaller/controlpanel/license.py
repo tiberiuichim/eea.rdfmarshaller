@@ -15,9 +15,12 @@ class ILicenses(Interface):
 
     rdfmarshaller_licenses = schema.Dict(
         title=u"Licenses",
-        description=u"Define license ID and content.",
-        key_type=schema.TextLine(title=u"License ID"),
-        value_type=schema.Text(title=u"License Content"))
+        description=u"Define licenses.",
+        key_type=schema.TextLine(title=u"License Title"),
+        value_type=schema.Text(title=u"License Text"))
+
+    # content=schema.TextLine(title=u"Content License"),
+    # data=schema.TextLine(title=u"Data License"),
 
 
 class LicensesEditForm(RegistryEditForm):
@@ -42,7 +45,7 @@ class IPortalTypeLicenses(Interface):
             title=u"Portal Type",
             vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"),
         value_type=schema.Choice(
-            title=u"License ID",
+            title=u"License Title",
             vocabulary="eea.rdfmarshaller.licenses")
         )
 
