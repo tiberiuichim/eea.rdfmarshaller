@@ -42,7 +42,7 @@ class LicenseViewlet(ViewletBase):
 
             license = licenses[0]
             license_url = license.get("license_url", "")
-            license_title = license.get("license_title", "")
+            license_title = license.get("license_id", "")
 
             text = json.dumps(
                 {
