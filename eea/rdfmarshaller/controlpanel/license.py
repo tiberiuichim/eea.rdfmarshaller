@@ -15,7 +15,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 class ILicense(Interface):
     license_id = schema.ASCIILine(
-        title=u"License ID",
+        title=u"License Title",
         description=u"Used to assign a license to a portal type."
     )
 
