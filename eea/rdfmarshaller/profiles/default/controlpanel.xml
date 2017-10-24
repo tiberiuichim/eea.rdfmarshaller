@@ -5,7 +5,7 @@
   i18n:domain="plone">
 
   <configlet
-    title="Global Licenses"
+    title="Copyright License Definitions"
     action_id="rdfmarshaller_licenses"
     appId="rdfmarshaller"
     category="Products"
