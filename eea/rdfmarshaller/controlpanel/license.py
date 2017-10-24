@@ -95,7 +95,7 @@ class LicensesVocabulary(object):
                     x.get('license_id') for x in licenses]
                 ]
         except Exception:
-            items = [SimpleTerm('WIP', 'WIP', 'WIP')]  # TODO Fix it.
+            items = [SimpleTerm(' ', ' ', ' ')]
 
         return SimpleVocabulary(items)
 

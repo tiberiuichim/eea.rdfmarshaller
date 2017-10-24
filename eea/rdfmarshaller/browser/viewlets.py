@@ -54,7 +54,7 @@ class LicenseViewlet(ViewletBase):
                     },
 
                     "@id": self.context.absolute_url(),
-                    "@type": "dcat:Dataset",
+                    "@type": self.context.portal_type,
                     "dct:title": self.context.title,
 
                     "dct:license": {
@@ -64,12 +64,12 @@ class LicenseViewlet(ViewletBase):
 
                     "dct:rights": {
                         "rdfs:label": "Rights Statement",
-                        "@id": "http://gov.example.org/dataset/example#rights",
+                        "@id": self.context.absolute_url(),
                         "odrs:copyrightNotice": "Crown copyright 2013",
                         "odrs:attributionText": "Example Department",
 
                         "odrs:attributionURL": {
-                            "@id": "http://gov.example.org/dataset/example"
+                            "@id": self.context.absolute_url(),
                         },
                         "odrs:contentLicense": {
                             "@id": license_url
