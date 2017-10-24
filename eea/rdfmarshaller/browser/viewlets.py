@@ -33,9 +33,9 @@ class LicenseViewlet(ViewletBase):
             if self.context.portal_type not in reg_types.keys():
                 return None  # No license assigned for this portal type
 
+            license_id = reg_types[self.context.portal_type]
             licenses = [
-                x for x in reg_licenses if x[
-                    'license_id'] == self.context.portal_type]
+                x for x in reg_licenses if x['license_id'] == license_id]
 
             if len(licenses) == 0:
                 return None  # No license details for this license id
