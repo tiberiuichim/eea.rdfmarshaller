@@ -35,14 +35,14 @@ class LicenseViewlet(ViewletBase):
 
             license_id = reg_types[self.context.portal_type]
             licenses = [
-                x for x in reg_licenses if x['license_id'] == license_id]
+                x for x in reg_licenses if x['id'] == license_id]
 
             if len(licenses) == 0:
                 return None  # No license details for this license id
 
             license = licenses[0]
-            license_url = license.get("license_url", "")
-            license_title = license.get("license_id", "")
+            license_url = license.get("url", "")
+            license_title = license.get("id", "")
 
             # [TODO] Update this.
             #

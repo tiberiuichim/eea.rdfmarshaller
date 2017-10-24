@@ -14,17 +14,17 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 class ILicense(Interface):
-    license_id = schema.ASCIILine(
+    id = schema.ASCIILine(
         title=u"License Title",
         description=u"Used to assign a license to a portal type."
     )
 
-    license_text = schema.Text(
+    text = schema.Text(
         title=u"License Text",
         description=u"Human readable text of license"
     )
 
-    license_url = schema.URI(
+    url = schema.URI(
         title=u"License URL",
         description=u"Don't forget http:// or https://"
     )
@@ -92,7 +92,7 @@ class LicensesVocabulary(object):
                 ".rdfmarshaller_licenses"]
             items = [
                 SimpleTerm(str(y), str(y), str(y)) for y in [
-                    x.get('license_id') for x in licenses]
+                    x.get('id') for x in licenses]
                 ]
         except Exception:
             items = [SimpleTerm(' ', ' ', ' ')]
