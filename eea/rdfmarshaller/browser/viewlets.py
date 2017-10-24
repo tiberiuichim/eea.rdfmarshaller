@@ -44,6 +44,11 @@ class LicenseViewlet(ViewletBase):
             license_url = license.get("license_url", "")
             license_title = license.get("license_id", "")
 
+            # [TODO] Update this.
+            #
+            # This is not using the eea.rdfmarshaller properly.
+            # This is work that isn't yet commited, still in work by Tibi and
+            # Alec, so it's fine for now, but will need refactoring.
             text = json.dumps(
                 {
                     "@context": {
