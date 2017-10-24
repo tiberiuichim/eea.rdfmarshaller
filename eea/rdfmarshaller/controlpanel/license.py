@@ -14,7 +14,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 class ILicense(Interface):
     id = schema.ASCIILine(
-        title=u"License",
+        title=u"License Title",
         description=u"Used to assign a license to a portal type."
     )
 
@@ -63,7 +63,7 @@ class IPortalTypeLicenses(Interface):
             title=u"Portal Type",
             vocabulary="plone.app.vocabularies.ReallyUserFriendlyTypes"),
         value_type=schema.Choice(
-            title=u"License Title",
+            title=u"License",
             vocabulary="eea.rdfmarshaller.licenses")
         )
 
