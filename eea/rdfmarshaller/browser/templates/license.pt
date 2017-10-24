@@ -1,5 +1,0 @@
-<tal:license tal:define="license_text python:view.license_text">
-  <script type="application/ld+json"
-          tal:condition="python:license_text is not None"
-          tal:content="structure python:license_text"></script>
-</tal:license>

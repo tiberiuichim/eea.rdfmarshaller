@@ -1,4 +1,3 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from plone.app.layout.viewlets.common import ViewletBase
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -13,10 +12,11 @@ REGISTRY_LICENSES = "eea.rdfmarshaller.controlpanel.license." + \
 
 
 class LicenseViewlet(ViewletBase):
-    render = ViewPageTemplateFile('templates/license.pt')
+    """ json-ld license content
+    """
 
     @property
-    def license_text(self):
+    def json_obj(self):
         """ Return assigned license for portal_type of this context or None
 
             Example:
@@ -82,3 +82,11 @@ class LicenseViewlet(ViewletBase):
             )
 
         return text
+
+    def render(self):
+        json_obj = self.json_obj
+        if json_obj is None:
+            return ""
+        return """<script type="application/ld+json">{}</script>""".format(
+                    json_obj
+                )
