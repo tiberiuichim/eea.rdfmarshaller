@@ -28,49 +28,57 @@ class LicenseViewlet(ViewletBase):
         reg_types = registry.get(REGISTRY_TYPE_LICENSES, None)
         reg_licenses = registry.get(REGISTRY_LICENSES, None)
 
-        license_url = "www.google.com"
-        license_title = "License Title Here"
-        # TODO Update this & template
-        # if reg_licenses is not None and reg_types is not None:
-        #     license_id = reg_types.get(self.context.portal_type, None)
-        #     if license_id is not None:
-        #         text = reg_licenses.get(license_id, None)
+        text = None
+        if reg_licenses is not None and reg_types is not None:
+            if self.context.portal_type not in reg_types.keys():
+                return None  # No license assigned for this portal type
 
-        text = json.dumps(
-            {
-                "@context": {
-                    "dcat": "http://www.w3.org/ns/dcat#",
-                    "dct": "http://purl.org/dc/terms/",
-                    "odrs": "http://schema.theodi.org/odrs#",
-                    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                },
+            licenses = [
+                x for x in reg_licenses if x[
+                    'license_id'] == self.context.portal_type]
 
-                "@id": self.context.absolute_url(),
-                "@type": "dcat:Dataset",
-                "dct:title": self.context.title,
+            if len(licenses) == 0:
+                return None  # No license details for this license id
 
-                "dct:license": {
-                    "@id": license_url,
-                    "dct:title": license_title
-                },
+            license = licenses[0]
+            license_url = license.get("license_url", "")
+            license_title = license.get("license_title", "")
 
-                "dct:rights": {
-                    "rdfs:label": "Rights Statement",
-                    "@id": "http://gov.example.org/dataset/example#rights",
-                    "odrs:copyrightNotice": "Crown copyright 2013",
-                    "odrs:attributionText": "Example Department",
-
-                    "odrs:attributionURL": {
-                        "@id": "http://gov.example.org/dataset/example"
+            text = json.dumps(
+                {
+                    "@context": {
+                        "dcat": "http://www.w3.org/ns/dcat#",
+                        "dct": "http://purl.org/dc/terms/",
+                        "odrs": "http://schema.theodi.org/odrs#",
+                        "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                     },
-                    "odrs:contentLicense": {
-                        "@id": license_url
+
+                    "@id": self.context.absolute_url(),
+                    "@type": "dcat:Dataset",
+                    "dct:title": self.context.title,
+
+                    "dct:license": {
+                        "@id": license_url,
+                        "dct:title": license_title
                     },
-                    "odrs:dataLicense": {
-                        "@id": license_url
+
+                    "dct:rights": {
+                        "rdfs:label": "Rights Statement",
+                        "@id": "http://gov.example.org/dataset/example#rights",
+                        "odrs:copyrightNotice": "Crown copyright 2013",
+                        "odrs:attributionText": "Example Department",
+
+                        "odrs:attributionURL": {
+                            "@id": "http://gov.example.org/dataset/example"
+                        },
+                        "odrs:contentLicense": {
+                            "@id": license_url
+                        },
+                        "odrs:dataLicense": {
+                            "@id": license_url
+                        }
                     }
                 }
-            }
-        )
+            )
 
         return text
