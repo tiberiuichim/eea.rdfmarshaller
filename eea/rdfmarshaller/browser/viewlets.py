@@ -1,14 +1,8 @@
 from plone.app.layout.viewlets.common import ViewletBase
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
 import json
-
-
-REGISTRY_TYPE_LICENSES = "eea.rdfmarshaller.controlpanel.license." + \
-    "IPortalTypeLicenses.rdfmarshaller_type_licenses"
-
-REGISTRY_LICENSES = "eea.rdfmarshaller.controlpanel.license." + \
-    "ILicenses.rdfmarshaller_licenses"
+from plone import api
+from eea.rdfmarshaller.controlpanel.license import ILicenses
+from eea.rdfmarshaller.controlpanel.license import IPortalTypeLicenses
 
 
 class LicenseViewlet(ViewletBase):
@@ -24,9 +18,10 @@ class LicenseViewlet(ViewletBase):
                     examples/simple-json-ld.json
         """
 
-        registry = getUtility(IRegistry)
-        reg_types = registry.get(REGISTRY_TYPE_LICENSES, None)
-        reg_licenses = registry.get(REGISTRY_LICENSES, None)
+        reg_types = api.portal.get_registry_record(
+            'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
+        reg_licenses = api.portal.get_registry_record(
+            'rdfmarshaller_licenses', interface=ILicenses)
 
         text = None
         if reg_licenses is not None and reg_types is not None:

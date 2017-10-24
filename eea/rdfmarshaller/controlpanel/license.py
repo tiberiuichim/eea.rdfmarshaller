@@ -1,12 +1,10 @@
 from collective.z3cform.datagridfield import BlockDataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
-from eea.rdfmarshaller.browser.viewlets import REGISTRY_LICENSES
+from plone import api
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.autoform import directives
-from plone.registry.interfaces import IRegistry
 from zope import schema
-from zope.component import getUtility
 from zope.interface import Interface
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
@@ -86,11 +84,12 @@ class PortalTypeLicensesView(ControlPanelFormWrapper):
 class LicensesVocabulary(object):
 
     def __call__(self, context):
-        registry = getUtility(IRegistry)
         try:
+            licenses = api.portal.get_registry_record(
+                'rdfmarshaller_licenses', interface=ILicenses)
             items = [
                 SimpleTerm(str(y), str(y), str(y)) for y in [
-                    x.get('id') for x in registry[REGISTRY_LICENSES]]
+                    x.get('id') for x in licenses]
                 ]
         except Exception:
             items = [SimpleTerm(' ', ' ', ' ')]
