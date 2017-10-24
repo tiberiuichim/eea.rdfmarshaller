@@ -1,5 +1,6 @@
 from collective.z3cform.datagridfield import BlockDataGridFieldFactory
 from collective.z3cform.datagridfield.registry import DictRow
+from eea.rdfmarshaller.browser.viewlets import REGISTRY_LICENSES
 from plone.app.registry.browser.controlpanel import ControlPanelFormWrapper
 from plone.app.registry.browser.controlpanel import RegistryEditForm
 from plone.autoform import directives
@@ -87,12 +88,9 @@ class LicensesVocabulary(object):
     def __call__(self, context):
         registry = getUtility(IRegistry)
         try:
-            licenses = registry[
-                "eea.rdfmarshaller.controlpanel.license.ILicenses"
-                ".rdfmarshaller_licenses"]
             items = [
                 SimpleTerm(str(y), str(y), str(y)) for y in [
-                    x.get('id') for x in licenses]
+                    x.get('id') for x in registry[REGISTRY_LICENSES]]
                 ]
         except Exception:
             items = [SimpleTerm(' ', ' ', ' ')]
