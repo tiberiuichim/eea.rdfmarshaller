@@ -18,10 +18,17 @@ class LicenseViewlet(ViewletBase):
                     examples/simple-json-ld.json
         """
 
-        reg_types = api.portal.get_registry_record(
-            'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
-        reg_licenses = api.portal.get_registry_record(
-            'rdfmarshaller_licenses', interface=ILicenses)
+        try:
+            reg_types = api.portal.get_registry_record(
+                'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
+        except KeyError:
+            reg_types = None
+
+        try:
+            reg_licenses = api.portal.get_registry_record(
+                'rdfmarshaller_licenses', interface=ILicenses)
+        except KeyError:
+            reg_licenses = None
 
         text = None
         if reg_licenses is not None and reg_types is not None:
