@@ -45,20 +45,48 @@ class TestProgramIntegration(unittest.TestCase):
             "<class 'Products.Five.metaclass.PortalTypeLicensesView'>"
 
         print "TEST registry"
-        reg_types = api.portal.get_registry_record(
-            'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
+        test_licenses = [
+            {
+                'url': 'http://mit-license.com',
+                'text': u'This is MIT license.',
+                'id': 'MIT'
+            },
+            {
+                'url': 'http://cc-license.com',
+                'text': u'This is CC license.',
+                'id': 'CC'
+            }
+        ]
+
+        api.portal.set_registry_record(
+            name='rdfmarshaller_licenses',
+            value=test_licenses,
+            interface=ILicenses
+        )
+
         reg_licenses = api.portal.get_registry_record(
             'rdfmarshaller_licenses', interface=ILicenses)
 
-        assert reg_types is None
-        assert reg_licenses is None
+        print "TEST registry: licenses are saved"
+        assert reg_licenses == test_licenses
 
-        # save_button = licenses_settings.form.buttons.items()[0][1]
-        # save_handler = licenses_settings.form.handlers.getHandler(
-        # save_button)
-        # save_handler.func(licenses_settings.form_instance, save_button)
+        # (Pdb) self.portal['test-page'].portal_type
+        # 'testpage' - so, let's use it:
+        test_portal_type_licenses = {'testpage': 'CC'}
 
-        # import pdb; pdb.set_trace()
+        api.portal.set_registry_record(
+            name='rdfmarshaller_type_licenses',
+            value=test_portal_type_licenses,
+            interface=IPortalTypeLicenses
+        )
+
+        reg_types = api.portal.get_registry_record(
+            'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
+
+        print "TEST registry: licenses-types are saved"
+        assert reg_types == test_portal_type_licenses
+
+        import pdb; pdb.set_trace()
 
 
 def test_suite():
