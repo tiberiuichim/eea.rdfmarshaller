@@ -86,7 +86,12 @@ class TestProgramIntegration(unittest.TestCase):
         print "TEST registry: licenses-types are saved"
         assert reg_types == test_portal_type_licenses
 
-        import pdb; pdb.set_trace()
+        print "TEST license viewlet rendering"
+        page = self.portal['test-page']()
+        assert """<script type="application/ld+json">""" in page
+        assert """http://cc-license.com""" in page
+        assert """http://mit-license.com""" not in page
+        assert """odrs:copyrightNotice""" in page
 
 
 def test_suite():
