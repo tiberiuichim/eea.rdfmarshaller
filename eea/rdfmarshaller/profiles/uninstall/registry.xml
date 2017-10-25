@@ -1,0 +1,8 @@
+<registry>
+  <record name="eea.rdfmarshaller.controlpanel.license.ILicenses.rdfmarshaller_licenses"
+          delete="True" remove="True" />
+
+  <record name="eea.rdfmarshaller.controlpanel.license.IPortalTypeLicenses.rdfmarshaller_type_licenses"
+          delete="True" remove="True" />
+
+</registry>
