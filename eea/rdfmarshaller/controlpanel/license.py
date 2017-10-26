@@ -23,6 +23,16 @@ class ILicense(Interface):
         description=u"Human readable text of license"
     )
 
+    copyright = schema.TextLine(
+        title=u"Copyright Notice",
+        description=u"Example: Crown copyright 2013"
+    )
+
+    attribution = schema.TextLine(
+        title=u"Attribution Text",
+        description=u"Example: Education Department"
+    )
+
     url = schema.URI(
         title=u"License URL",
         description=u"Don't forget http:// or https://"

@@ -45,6 +45,8 @@ class LicenseViewlet(ViewletBase):
             license = licenses[0]
             license_url = license.get("url", "")
             license_title = license.get("id", "")
+            copyright = license.get("copyright", "")
+            attribution = license.get("attribution", "")
 
             # [TODO] Update this.
             #
@@ -72,8 +74,8 @@ class LicenseViewlet(ViewletBase):
                     "dct:rights": {
                         "rdfs:label": "Rights Statement",
                         "@id": self.context.absolute_url(),
-                        "odrs:copyrightNotice": "Crown copyright 2013",
-                        "odrs:attributionText": "Example Department",
+                        "odrs:copyrightNotice": copyright,
+                        "odrs:attributionText": attribution,
 
                         "odrs:attributionURL": {
                             "@id": self.context.absolute_url(),
