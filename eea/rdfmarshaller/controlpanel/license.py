@@ -23,12 +23,12 @@ class ILicense(Interface):
         description=u"Human readable text of license"
     )
 
-    copyright = schema.TextLine(
+    copyright = schema.ASCIILine(
         title=u"Copyright Notice",
         description=u"Example: Crown copyright 2013"
     )
 
-    attribution = schema.TextLine(
+    attribution = schema.ASCIILine(
         title=u"Attribution Text",
         description=u"Example: Education Department"
     )
