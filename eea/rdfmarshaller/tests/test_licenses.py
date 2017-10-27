@@ -6,10 +6,8 @@ from eea.rdfmarshaller.testing import INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-import unittest
 from plone.app.upgrade.utils import loadMigrationProfile
-# from plone.registry.record import Record
-# from plone.registry import field
+import unittest
 
 
 class TestProgramIntegration(unittest.TestCase):
@@ -30,17 +28,16 @@ class TestProgramIntegration(unittest.TestCase):
 
     def test_licenses(self):
         """ test licenses """
-        licenses_settings = self.portal.unrestrictedTraverse(
-            'licenses-settings')
 
         # TEST @@licenses-settings exists
+        licenses_settings = self.portal.unrestrictedTraverse(
+            'licenses-settings')
         assert str(type(licenses_settings)) == \
             "<class 'Products.Five.metaclass.LicensesView'>"
 
+        # TEST @@portal-type-licenses-settings exists
         portal_type_licenses_settings = self.portal.unrestrictedTraverse(
             'portal-type-licenses-settings')
-
-        # TEST @@portal-type-licenses-settings exists
         assert str(type(portal_type_licenses_settings)) == \
             "<class 'Products.Five.metaclass.PortalTypeLicensesView'>"
 
@@ -62,32 +59,27 @@ class TestProgramIntegration(unittest.TestCase):
             }
         ]
 
+        # TEST registry: licenses are saved
         api.portal.set_registry_record(
             name='rdfmarshaller_licenses',
             value=test_licenses,
             interface=ILicenses
         )
-
         reg_licenses = api.portal.get_registry_record(
             'rdfmarshaller_licenses', interface=ILicenses)
-
-        # TEST registry: licenses are saved
         assert reg_licenses == test_licenses
 
+        # TEST registry: licenses-types are saved
         # (Pdb) self.portal['test-page'].portal_type
         # 'testpage' - so, let's use it:
         test_portal_type_licenses = {'testpage': 'CC'}
-
         api.portal.set_registry_record(
             name='rdfmarshaller_type_licenses',
             value=test_portal_type_licenses,
             interface=IPortalTypeLicenses
         )
-
         reg_types = api.portal.get_registry_record(
             'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
-
-        # TEST registry: licenses-types are saved
         assert reg_types == test_portal_type_licenses
 
         # TEST license viewlet rendering
