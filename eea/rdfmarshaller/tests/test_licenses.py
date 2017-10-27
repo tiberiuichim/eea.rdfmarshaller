@@ -1,7 +1,7 @@
 """ Test licenses feature """
 
-from eea.rdfmarshaller.controlpanel.license import ILicenses
-from eea.rdfmarshaller.controlpanel.license import IPortalTypeLicenses
+from eea.rdfmarshaller.licenses.license import ILicenses
+from eea.rdfmarshaller.licenses.license import IPortalTypeLicenses
 from eea.rdfmarshaller.testing import INTEGRATION_TESTING
 from plone import api
 from plone.app.testing import TEST_USER_ID
