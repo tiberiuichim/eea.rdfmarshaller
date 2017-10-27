@@ -93,6 +93,13 @@ class TestProgramIntegration(unittest.TestCase):
         assert """Test Department""" not in page
         assert """Department""" in page
 
+        # TEST license viewlet rendering in Plone Site
+        page = self.portal()
+        assert """<script type="application/ld+json">""" not in page
+        assert """http://cc-license.com""" not in page
+        assert """http://mit-license.com""" not in page
+        assert """odrs:copyrightNotice""" not in page
+
 
 def test_suite():
     """ test suite """
