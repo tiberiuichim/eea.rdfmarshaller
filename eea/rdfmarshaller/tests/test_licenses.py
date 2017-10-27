@@ -33,28 +33,32 @@ class TestProgramIntegration(unittest.TestCase):
         licenses_settings = self.portal.unrestrictedTraverse(
             'licenses-settings')
 
-        print "TEST @@licenses-settings exists"
+        # TEST @@licenses-settings exists
         assert str(type(licenses_settings)) == \
             "<class 'Products.Five.metaclass.LicensesView'>"
 
         portal_type_licenses_settings = self.portal.unrestrictedTraverse(
             'portal-type-licenses-settings')
 
-        print "TEST @@portal-type-licenses-settings exists"
+        # TEST @@portal-type-licenses-settings exists
         assert str(type(portal_type_licenses_settings)) == \
             "<class 'Products.Five.metaclass.PortalTypeLicensesView'>"
 
-        print "TEST registry"
+        # TEST registry
         test_licenses = [
             {
                 'url': 'http://mit-license.com',
                 'text': u'This is MIT license.',
-                'id': 'MIT'
+                'id': 'MIT',
+                'copyright': 'Copyright 2017',
+                'attribution': 'Test Department'
             },
             {
                 'url': 'http://cc-license.com',
                 'text': u'This is CC license.',
-                'id': 'CC'
+                'id': 'CC',
+                'copyright': 'Copyright 2015',
+                'attribution': 'Department'
             }
         ]
 
@@ -67,7 +71,7 @@ class TestProgramIntegration(unittest.TestCase):
         reg_licenses = api.portal.get_registry_record(
             'rdfmarshaller_licenses', interface=ILicenses)
 
-        print "TEST registry: licenses are saved"
+        # TEST registry: licenses are saved
         assert reg_licenses == test_licenses
 
         # (Pdb) self.portal['test-page'].portal_type
@@ -83,15 +87,19 @@ class TestProgramIntegration(unittest.TestCase):
         reg_types = api.portal.get_registry_record(
             'rdfmarshaller_type_licenses', interface=IPortalTypeLicenses)
 
-        print "TEST registry: licenses-types are saved"
+        # TEST registry: licenses-types are saved
         assert reg_types == test_portal_type_licenses
 
-        print "TEST license viewlet rendering"
+        # TEST license viewlet rendering
         page = self.portal['test-page']()
         assert """<script type="application/ld+json">""" in page
         assert """http://cc-license.com""" in page
         assert """http://mit-license.com""" not in page
         assert """odrs:copyrightNotice""" in page
+        assert """Copyright 2017""" not in page
+        assert """Copyright 2015""" in page
+        assert """Test Department""" not in page
+        assert """Department""" in page
 
 
 def test_suite():
