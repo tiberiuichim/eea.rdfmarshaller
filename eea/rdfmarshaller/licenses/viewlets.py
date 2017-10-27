@@ -1,8 +1,8 @@
-from plone.app.layout.viewlets.common import ViewletBase
-import json
-from plone import api
 from eea.rdfmarshaller.licenses.license import ILicenses
 from eea.rdfmarshaller.licenses.license import IPortalTypeLicenses
+from plone import api
+from plone.app.layout.viewlets.common import ViewletBase
+import json
 
 
 class LicenseViewlet(ViewletBase):
