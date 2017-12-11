@@ -3,6 +3,10 @@ Changelog
 
 10.3.dev0 - (unreleased)
 ------------------------
+* Code cleanup in eea.rdfmarshaller.archetypes.modifiers
+  [tiberich]
+* Feature: added an extendable fallback implementation of dcterms:description
+  [tiberich #90546]
 
 10.2 - (2017-09-26)
 -------------------
